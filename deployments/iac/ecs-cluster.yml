@@ -1,0 +1,73 @@
+#   ----------------------------------------------------------------------
+#   Copyright (C) 2018 World Intellectual Property Organization (WIPO).
+#   All Rights Reserved.
+#
+#   v1.0    J. Aguilar     Initial Version
+#   ----------------------------------------------------------------------
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: > 
+  Template that configures the ECS Cluster
+Parameters:
+  NamePrefix:
+    Description: Prefix added to the name of resources created in this stack (must be the same as the one of the pipeline)
+    Type: String
+
+Resources:
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+
+  ECSTaskDefinitionExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${NamePrefix}-ecs-td-execution-role'
+      Path: /
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [ecs-tasks.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+      Policies:
+      - PolicyName: !Sub '${NamePrefix}-ecs-td-execution-policy'
+        PolicyDocument:
+          Statement:          
+          - Effect: Allow
+            Action: 
+              - secretsmanager:GetSecretValue
+            Resource:
+              - !Sub arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:/${NamePrefix}/*
+  
+  ECSTaskDefinitionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${NamePrefix}-ecs-td-role'
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [ecs-tasks.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+      - PolicyName: !Sub '${NamePrefix}-ecs-td-policy'
+        PolicyDocument:
+          Statement:
+            - Effect: Allow
+              Action: 
+                - secretsmanager:GetSecretValue
+              Resource:
+                - !Sub arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:/${NamePrefix}/*
+
+Outputs:
+  ECSCluster:
+    Value: !Ref 'ECSCluster'
+
+  TaskDefinitionExecutionRoleARN: 
+    Value: !GetAtt ECSTaskDefinitionExecutionRole.Arn
+
+  TaskDefinitionRoleARN: 
+    Value: !GetAtt ECSTaskDefinitionRole.Arn

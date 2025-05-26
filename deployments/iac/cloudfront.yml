@@ -1,0 +1,88 @@
+#   ----------------------------------------------------------------------
+#   Copyright (C) 2018 World Intellectual Property Organization (WIPO).
+#   All Rights Reserved.
+#
+#   v1.0    J. Aguilar     Initial Version
+#   ----------------------------------------------------------------------
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: > 
+  Template to create a cloudformation distribution
+
+Parameters:
+  NamePrefix:
+    Description: Prefix added to the name of resources created in this stack (must be the same as the one of the pipeline)
+    Type: String
+
+  CloudfrontOAI:
+    Description: "Cloudfront Origin Access Identity"
+    Type: String
+  
+  S3OriginDomainName:
+    Description: "The S3 origin domain name that will be proxied by Cloudfront"
+    Type: String
+  
+  ApiOriginDomainName:
+    Description: "The API origin domain name that will be proxied by Cloudfront"
+    Type: String
+  
+Resources:
+  CloudfrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - Id: Origin
+            DomainName: !Ref S3OriginDomainName
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudfrontOAI}'
+          - Id: Api
+            DomainName: !Ref ApiOriginDomainName   
+            CustomOriginConfig:
+              OriginReadTimeout: 60
+              OriginProtocolPolicy: match-viewer
+        Enabled: true
+        HttpVersion: 'http2'
+        DefaultRootObject: index.html
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          Compress: true
+          TargetOriginId: Origin
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: allow-all
+        CacheBehaviors:
+          - AllowedMethods:            
+              - GET
+              - HEAD
+              - OPTIONS
+              - PATCH
+              - POST
+              - PUT
+              - DELETE
+            Compress: true
+            TargetOriginId: Api
+            PathPattern: '/api/*'
+            ForwardedValues:
+              QueryString: true
+            DefaultTTL: 0
+            MaxTTL: 0
+            MinTTL: 0
+            ViewerProtocolPolicy: allow-all
+        PriceClass: PriceClass_All
+        CustomErrorResponses:          
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: "/index.html"
+          - ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: "/index.html"
+      
+Outputs:
+  DistributionId:
+    Value: !Ref CloudfrontDistribution

@@ -1,0 +1,61 @@
+#   ----------------------------------------------------------------------
+#   Copyright (C) 2018 World Intellectual Property Organization (WIPO).
+#   All Rights Reserved.
+#
+#   v1.0    J. Aguilar     Initial Version
+#   ----------------------------------------------------------------------
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: >
+  Template to build the S3 buckets
+
+Parameters:
+  NamePrefix:
+    Description: Prefix added to the name of resources created in this stack (must be the same as the one of the pipeline)
+    Type: String
+  
+Resources:
+  CloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub 'CloudFront OAI for fronted'
+
+  FrontendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${NamePrefix}-frontend-${AWS::Region}-${AWS::AccountId}
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: ObjectWriter
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+
+  OfficeFrontendPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref FrontendBucket
+      PolicyDocument:
+        Id: CloudfrontAccessPolicy
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId
+            Action: "s3:GetObject"
+            Resource:
+              - !Sub "arn:aws:s3:::${FrontendBucket}/*"
+
+Outputs:
+  CloudfrontOAI:
+    Description: Cloudfront OAI
+    Value: !Ref CloudFrontOriginAccessIdentity
+  
+  S3DomainName:
+    Value: !GetAtt FrontendBucket.DomainName

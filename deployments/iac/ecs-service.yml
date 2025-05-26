@@ -1,0 +1,166 @@
+#   ----------------------------------------------------------------------
+#   Copyright (C) 2018 World Intellectual Property Organization (WIPO).
+#   All Rights Reserved.
+#
+#   v1.0    J. Aguilar     Initial Version
+#   ----------------------------------------------------------------------
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: > 
+  Template to build the ECS Service
+
+Parameters:  
+  NamePrefix:
+    Description: Prefix added to the name of resources created in this stack (must be the same as the one of the pipeline)
+    Type: String
+  
+  VpcId:
+    Description: Target VPC
+    Type: AWS::EC2::VPC::Id
+  
+  TaskDefinitionExecutionRoleARN:
+    Type: String
+    Description: Task Definition Execution Role to grant access to operations that need to perform at the ECS Cluster level
+  
+  TaskDefinitionRoleARN:
+    Type: String
+    Description: Task Definition Role to grant access to operations that need to perform at the ECS Task level
+
+  ContainerSubnetsId:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: Private subnets associated with the container
+  
+  ECSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup::Id
+    Description: Security Group that grants access to the service port    
+
+  ContainerImage:
+    Type: String
+    Description: Docker image name
+
+  ServiceName:
+    Type: String
+    Description: ECS Container Service Name
+
+  ECSCluster:
+    Type: String
+    Description: An ECS Cluster
+  
+  AlbListenerRef:
+    Type: String
+    Description: Application Load Balancer Listener
+
+
+Mappings:
+  ContainerTypeMap:
+    micro:
+      Cpu: 256
+      Memory: 512
+    xsmall:
+      Cpu: 512
+      Memory: 1024
+    small:
+      Cpu: 512
+      Memory: 2048
+    medium:
+      Cpu: 1024
+      Memory: 2048
+    xmedium:
+      Cpu: 1024
+      Memory: 4096
+    large:
+      Cpu: 2048
+      Memory: 4096
+    xlarge:
+      Cpu: 4096
+      Memory: 8192
+
+Resources:
+  ServiceTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub '${NamePrefix}-${ServiceName}-ecs-taskdefinition'
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: 1024
+      Memory: 4096
+      NetworkMode: awsvpc
+      TaskRoleArn: !Ref TaskDefinitionRoleARN
+      ExecutionRoleArn: !Ref TaskDefinitionExecutionRoleARN
+      ContainerDefinitions:
+        - Name: !Ref ServiceName
+          Essential: true
+          Image: !Ref ContainerImage
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref ServiceName
+              awslogs-region: !Ref 'AWS::Region'
+              awslogs-stream-prefix: 'container'
+          PortMappings:
+            - ContainerPort: 8080
+          Environment:
+            - Name: DISCOVERY_SERVICE_NAME
+              Value: !Ref ServiceName
+            - Name: DISCOVERY_SERVICE_ID
+              Value: !Ref DiscoveryService
+          Secrets:
+            - ValueName: ValueFrom
+              KeyValuePairs: !Ref SecretParams
+
+  ALBTG:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      TargetType: 'ip'
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: !Sub '/actuator/health'
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      Name:  !Sub '${namePrefix}-tg-${ServiceName}'
+      Port: 8080
+      Protocol: HTTP
+      UnhealthyThresholdCount: 5
+      VpcId: !Ref VpcId
+      
+  ALBListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+      - Type: forward
+        TargetGroupArn: !Ref ALBTG
+      Conditions:
+      - Field: path-pattern
+        Values: 
+          - '/*' 
+      ListenerArn: !Ref AlbListenerRef
+      Priority: 1
+
+  Service:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: !Sub ${NamePrefix}-${ServiceName}-service
+      Cluster: !Ref ECSCluster
+      DesiredCount: 1
+      LaunchType: FARGATE
+      TaskDefinition: !Ref ServiceTaskDefinition
+      PropagateTags: SERVICE
+      DeploymentConfiguration:
+        DeploymentCircuitBreaker:
+          Enable: 'true'
+          Rollback: 'true'
+        MinimumHealthyPercent: 50
+        MaximumPercent: 200
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+            SecurityGroups:
+                - !Ref ECSSecurityGroup
+            Subnets: !Ref ContainerSubnetsId
+      LoadBalancers:
+        - ContainerName: !Ref ServiceName
+          ContainerPort: 8080
+          TargetGroupArn: !Ref ALBTG
+              
+Outputs:
+  ServiceName:
+    Value: !GetAtt Service.Name

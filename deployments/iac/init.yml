@@ -1,0 +1,141 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template to create basic AWS resources'
+
+Parameters:
+  VpcId:
+    Description: Target VPC
+    Type: AWS::EC2::VPC::Id
+
+  NamePrefix:
+    Description: 'Prefix for any naming properties'
+    Type: String
+
+Resources:
+  ECRRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: wipolex-rag
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      RepositoryPolicyText:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowPushPull
+            Effect: Allow
+            Principal:
+              AWS:
+                - !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+            Action:
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+              - ecr:BatchCheckLayerAvailability
+              - ecr:PutImage
+              - ecr:InitiateLayerUpload
+              - ecr:UploadLayerPart
+              - ecr:CompleteLayerUpload
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [
+              {
+                "rulePriority": 1,
+                "description": "Expire images older than 30 days",
+                "selection": {
+                  "tagStatus": "untagged",
+                  "countType": "sinceImagePushed",
+                  "countUnit": "days",
+                  "countNumber": 30
+                },
+                "action": {
+                  "type": "expire"
+                }
+              }
+            ]
+          }
+    DeletionPolicy: DELETE
+
+  ELBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Join ['-', [!Ref NamePrefix, 'sg-elb']]
+      GroupDescription: Application Load Balancer security group
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        # - Description: Allow HTTP access from WIPO IPs
+        #   IpProtocol: tcp
+        #   FromPort: '80'
+        #   ToPort: '80'
+        #   SourceSecurityGroupId: !Ref WipoPrefixListSecurityGroupHttp
+        # - Description: Allow HTTPS access from WIPO IPs
+        #   IpProtocol: tcp
+        #   FromPort: '443'
+        #   ToPort: '443'
+        #   SourceSecurityGroupId: !Ref WipoPrefixListSecurityGroupHttps
+        - Description: Allow HTTPS access from Cloudfront IPs
+          IpProtocol: tcp
+          FromPort: '443'
+          ToPort: '443'
+          SourcePrefixListId: pl-a3a144ca #AWS-managed com.amazonaws.global.cloudfront.origin-facing prefix list
+     
+  ECSSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Join ['-', [!Ref NamePrefix, 'sg-ecs']]
+      GroupDescription: ECS security group
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - Description: Allow access to the External load balancers on port 8080
+          IpProtocol: 'tcp'
+          FromPort: '8080'
+          ToPort: '8080'
+          SourceSecurityGroupId: !Ref ELBSecurityGroup
+        # - Description: Ingress to VPC for all ports
+        #   IpProtocol: tcp
+        #   CidrIp: !Ref vpcCidrBlock
+        #   FromPort: 0
+        #   ToPort: 65535
+          
+  # WipoPrefixListSecurityGroupHttp:
+  #   Type: AWS::EC2::SecurityGroup
+  #   Properties:
+  #     GroupName: !Join ['-', [!Ref NamePrefix, 'wipo-prefix-http']]
+  #     GroupDescription: WIPO prefix list for http
+  #     VpcId: !Ref VpcId
+  #     SecurityGroupIngress:
+  #       - Description: Allow HTTP access from WIPO IPs
+  #         IpProtocol: tcp
+  #         FromPort: '80'
+  #         ToPort: '80'
+  #         SourcePrefixListId: pl-077825f18b5d86e6d
+
+  # WipoPrefixListSecurityGroupHttps:
+  #   Type: AWS::EC2::SecurityGroup
+  #   Properties:
+  #     GroupName: !Join ['-', [!Ref NamePrefix, 'wipo-prefix-https']]
+  #     GroupDescription: WIPO prefix list for https
+  #     VpcId: !Ref VpcId
+  #     SecurityGroupIngress:
+  #       - Description: Allow HTTP access from WIPO IPs
+  #         IpProtocol: tcp
+  #         FromPort: '443'
+  #         ToPort: '443'
+  #         SourcePrefixListId: pl-077825f18b5d86e6d
+
+Outputs:
+  RepositoryName:
+    Description: Name of the ECR repository
+    Value: !Ref ECRRepository
+  
+  RepositoryURI:
+    Description: URI of the ECR repository
+    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECRRepository}
+  
+  RepositoryArn:
+    Description: ARN of the ECR repository
+    Value: !GetAtt ECRRepository.Arn
+  
+  ECSSecurityGroup:
+    Value: !Ref ECSSecurityGroup
+
+  ALBSecurityGroup:
+    Value: !Ref ELBSecurityGroup

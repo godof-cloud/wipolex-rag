@@ -1,0 +1,89 @@
+#   ----------------------------------------------------------------------
+#   Copyright (C) 2018 World Intellectual Property Organization (WIPO).
+#   All Rights Reserved.
+#
+#   v1.0    J. Aguilar     Initial Version
+#   ----------------------------------------------------------------------
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: > 
+  Master Cloudformation template that orchestrates the created of the Cloud Environment
+
+Parameters:
+
+  NamePrefix:
+      Description: Prefix added to the name of resources created in this stack (must be the same as the one of the pipeline)
+      Type: String
+  
+  VpcId:
+    Description: Target VPC
+    Type: AWS::EC2::VPC::Id
+
+  Subnet1:
+    Description: Subnet 1
+    Type: AWS::EC2::Subnet::Id
+  
+  Subnet2:
+    Description: Subnet 2
+    Type: AWS::EC2::Subnet::Id
+
+Resources:
+  
+  InitStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://rag-n-rock-artifacts/init.yml
+      Parameters:
+        NamePrefix: !Ref NamePrefix
+        VpcId: !Ref VpcId
+
+  S3Stack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://rag-n-rock-artifacts/s3.yml
+      Parameters:
+        NamePrefix: !Ref NamePrefix
+
+  AlbStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://rag-n-rock-artifacts/alb.yml
+      Parameters:
+        VpcId: !Ref VpcId
+        AlbSubnet1Id: !Ref Subnet1
+        AlbSubnet2Id: !Ref Subnet2
+        NamePrefix: !Ref NamePrefix
+        AlbSecurityGroup: !GetAtt InitStack.Outputs.ALBSecurityGroup
+  
+  EcsStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://rag-n-rock-artifacts/ecs-cluster.yml
+      Parameters:
+        NamePrefix: !Ref NamePrefix
+  
+  ServiceStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://rag-n-rock-artifacts/ecs-service.yml
+      Parameters:
+        NamePrefix: !Ref NamePrefix
+        VpcId: !Ref VpcId
+        TaskDefinitionExecutionRoleARN: !GetAtt EcsStack.Outputs.TaskDefinitionExecutionRoleARN
+        TaskDefinitionRoleARN: !GetAtt EcsStack.Outputs.TaskDefinitionRoleARN
+        ContainerSubnetsId: !Join [',', [!Ref Subnet1, !Ref Subnet2] ]
+        ECSSecurityGroup: !GetAtt InitStack.Outputs.ECSSecurityGroup
+        ContainerImage: 090460870492.dkr.ecr.eu-central-1.amazonaws.com/rag-n-rock:latest
+        ServiceName: rag-n-rock
+        ECSCluster: !GetAtt EcsStack.Outputs.ECSCluster
+        AlbListenerRef: !GetAtt AlbStack.Outputs.LoadBalancerListenerRef
+  
+  CloudFrontStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub https://rag-n-rock-artifacts/cloudfront.yml
+      Parameters:
+        NamePrefix: !Ref NamePrefix
+        CloudfrontOAI: !GetAtt S3Stack.Outputs.CloudfrontOAI
+        S3OriginDomainName: !GetAtt S3Stack.Outputs.S3DomainName
+        ApiOriginDomainName: !GetAtt AlbStack.Outputs.LoadBalancerURL
