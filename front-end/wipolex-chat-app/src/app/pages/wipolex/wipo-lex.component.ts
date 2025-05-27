@@ -8,7 +8,16 @@ import { Component, OnInit } from '@angular/core';
 export class WipoLexComponent {
 
   constructor() { }
-  
+  question :string = '';
+  answer :string = '';
   blocked = false;
+  displayResult = false;
 
+  submitQuestion() {
+    this.blocked = true;
+    this.displayResult = true;
+    this.question = 'What is your name?'
+    this.answer = 'Tarun';
+    this.blocked = false;
+  }
 }

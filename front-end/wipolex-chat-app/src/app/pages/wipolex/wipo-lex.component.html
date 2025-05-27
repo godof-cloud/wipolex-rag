@@ -5,24 +5,22 @@
 </f-facet>
 
 <w-step>
-  <p facet-step-info>To assist parties in researching and preparing their UDRP filings, the WIPO Center also provides
-    the following jurisprudential tools and supporting resources.</p>
+  <p facet-step-info>To assist you ...</p>
 </w-step>
 
-
-
 <w-edit-panel>
-  <w-section>
+  <w-section *ngIf="displayResult">
     <w-slot>
-      Question:
-      <br>Answer:
+      <f-facet name="actions">
+      &nbsp;Question: {{question}}
+      <br>&nbsp;Answer: {{answer}}
+    </f-facet>
     </w-slot>
   </w-section>
 
   <w-section>
     <w-slot>
-      <w-input-textarea [label]="'Ask Wipo Lex'" [labelOnTop]="true">
-      </w-input-textarea>
+      <w-input-textarea [label]="'Ask Wipo Lex'" [labelOnTop]="true"></w-input-textarea>
     </w-slot>
   </w-section>
 
@@ -30,6 +28,6 @@
 
 <w-page-header [disableUppercase]="true" [showPortfolio]="false">
   <f-facet name="actions">
-    <button w-button label="Forward" buttonType="tertiary" icon-end="arrow_forward"></button>
+    <button w-button (click)="submitQuestion()" label="Forward" buttonType="tertiary" icon-end="arrow_forward"></button>
   </f-facet>
 </w-page-header>
