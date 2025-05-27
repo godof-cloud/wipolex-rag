@@ -25,11 +25,13 @@
 
   <w-section>
     <w-slot>
-      <w-input-textarea [label]="'Ask WIPO Lex'" [labelOnTop]="true"></w-input-textarea>
+      <w-input-textarea   [(ngModel)]="question"  [label]="'Ask WIPO Lex'"  [labelOnTop]="true"></w-input-textarea>
     </w-slot>
   </w-section>
-  
+
 </w-edit-panel>
+
+
 
 <w-page-header [disableUppercase]="true" [showPortfolio]="false">
   <f-facet name="actions">

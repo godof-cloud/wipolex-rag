@@ -22,11 +22,13 @@ export class WipoLexComponent {
       // this.uploadService.submitQuestion(this.question).subscribe(
       //   response => {
           this.displayResult = true;
-          this.question = 'What is your name?'
+          this.question;
           this.answer = 'test test';
           this.blocked = false;
         // });
     }, 500);
 
   }
+
+  
 }
