@@ -1,0 +1,10 @@
+<span (click)="sort()"> 
+  <ng-content></ng-content> 
+  <i class="clf-sort" *ngIf="sorting && sortingProperty && enabled"
+    [ngClass]="{
+      'clf-sort-down': sorting.direction === Direction.ASC && isSorted,
+      'clf-sort-up': sorting.direction === Direction.DESC && isSorted,
+      'clf-sort-unsorted': !isSorted
+    }"
+  ></i>
+</span>
