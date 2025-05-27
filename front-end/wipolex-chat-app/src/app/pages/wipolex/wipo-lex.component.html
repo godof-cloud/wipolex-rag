@@ -1,0 +1,35 @@
+<w-block-ui [blocked]="blocked" [title]="'processing'" [text]="'please wait'"></w-block-ui>
+<f-facet name="step-info">
+  <w-page-header [title]="'WIPO Lex'" [disableUppercase]="true" [showPortfolio]="false">
+  </w-page-header>
+</f-facet>
+
+<w-step>
+  <p facet-step-info>To assist parties in researching and preparing their UDRP filings, the WIPO Center also provides
+    the following jurisprudential tools and supporting resources.</p>
+</w-step>
+
+
+
+<w-edit-panel>
+  <w-section>
+    <w-slot>
+      Question:
+      <br>Answer:
+    </w-slot>
+  </w-section>
+
+  <w-section>
+    <w-slot>
+      <w-input-textarea [label]="'Ask Wipo Lex'" [labelOnTop]="true">
+      </w-input-textarea>
+    </w-slot>
+  </w-section>
+
+</w-edit-panel>
+
+<w-page-header [disableUppercase]="true" [showPortfolio]="false">
+  <f-facet name="actions">
+    <button w-button label="Forward" buttonType="tertiary" icon-end="arrow_forward"></button>
+  </f-facet>
+</w-page-header>

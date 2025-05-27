@@ -5,13 +5,11 @@
 export const environment = {
   production: false,
   contextIsRoot: false,
-  paymentLink:'https://www3dev.wipo.int/amc-payment',
   webComponentsPath: '',
-  apiUrl: 'https://wwwdev.wipo.int/domains-api/api/v1/',
-  recaptchaSiteKey: '',
+  apiUrl: 'https://',
   cookieDomain: 'localhost',
   languageQueryParamName: 'lang',
-  siteUrl:'https://wwwdev.wipo.int/',
+  siteUrl: '',
 };
 
 /*
