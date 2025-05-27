@@ -62,7 +62,7 @@
 		<dependency>
 		    <groupId>org.springframework.ai</groupId>
 		    <artifactId>spring-ai-core</artifactId>
-		    <version>1.0.0-M6</version>
+         <version>1.0.0-M6</version>
 		</dependency>
 
 		<dependency>
@@ -76,7 +76,32 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+		
+		
+	    <!-- Spring AI Bedrock -->
+	    <dependency>
+	        <groupId>org.springframework.ai</groupId>
+	        <artifactId>spring-ai-bedrock</artifactId>
+	    </dependency>
+	    
+	    <!-- AWS SDK for Bedrock Knowledge Bases -->
+	    <dependency>
+	        <groupId>software.amazon.awssdk</groupId>
+	        <artifactId>bedrockagent</artifactId>
+	        <version>2.31.50</version> <!-- Use latest version -->
+	    </dependency>
+    <!-- AWS SDK for Bedrock - Core -->
+    <dependency>
+        <groupId>software.amazon.awssdk</groupId>
+        <artifactId>bedrock</artifactId>
+        <version>2.21.35</version> <!-- Use the latest version -->
+    </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>bedrockagentruntime</artifactId>
+            <version>2.21.35</version>
+        </dependency>
+    	</dependencies>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

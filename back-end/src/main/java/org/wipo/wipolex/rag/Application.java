@@ -21,7 +21,6 @@ public class Application {
 		var systemPrompt = """
 				Your are an AI powered lawyer that helps users to find useful information about ...
 				""";
-		
 		return builder
 				.defaultSystem(systemPrompt)
 				.build();
