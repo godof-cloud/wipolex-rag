@@ -1,0 +1,40 @@
+<!-- <w-block-ui [blocked]="blocked" [title]="'processing'" [text]="'please wait'"></w-block-ui> -->
+<f-facet name="step-info">
+  <w-page-header [title]="'WIPO Lex'" [disableUppercase]="true" [showPortfolio]="false">
+  </w-page-header>
+</f-facet>
+
+<w-step>
+  <p facet-step-info>How to assist you ...</p>
+</w-step>
+
+<w-edit-panel>
+  <w-section *ngIf="blocked">
+    <w-slot style="padding: 10px;">
+      <f-facet name="actions">  Loading...   </f-facet>
+    </w-slot>
+  </w-section>
+  <w-section *ngIf="displayResult">
+    <w-slot  style="padding: 10px;">
+      <f-facet name="actions">
+      &nbsp;Question: {{question}}
+      <br>&nbsp;Answer: {{answer}}
+    </f-facet>
+    </w-slot>
+  </w-section>
+
+  <w-section>
+    <w-slot>
+      <w-input-textarea  (click)="enterQuestion()" [(ngModel)]="question"  [label]="'Ask WIPO Lex'"  [labelOnTop]="true"></w-input-textarea>
+    </w-slot>
+  </w-section>
+
+</w-edit-panel>
+
+
+
+<w-page-header [disableUppercase]="true" [showPortfolio]="false">
+  <f-facet name="actions">
+    <button w-button (click)="submitQuestion()" label="Send" buttonType="tertiary" icon-end="arrow_forward"></button>
+  </f-facet>
+</w-page-header>

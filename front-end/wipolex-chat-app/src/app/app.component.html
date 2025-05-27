@@ -1,38 +1,19 @@
 <app-loader></app-loader>
-<div  dir="{{ 'direction' | translate}}"> 
+<div > 
 
-<wipo-navbar *ngIf="!isFiling()"
-[appId]='AMC_FORMS_APP_ID' [pageKey]='pageKey'
+
+<wipo-navbar 
+[appId]='' [pageKey]=''
 [applicationLink] = 'appLink'
 [language]="languageService.currentLanguage"
-languageOptions = '[{ "code": "en"}]'
-applicationName="{{ 'isDomainappName' | translate }}"
+languageOptions = '[{ "code": "en"},{"code":"es"},{"code":"fr"}]'
+applicationName=""
 [helpOptions] = 'contactUsOptions'
 [applicationCategory] = 'appCategory'
-[customBreadcrumbs] = ''
->
+[customBreadcrumbs] = ''>
 </wipo-navbar>
 
-<wipo-navbar *ngIf="isFiling()"
-[appId]='AMC_FORMS_APP_ID' [pageKey]='pageKey'
-[applicationLink] = 'appLink'
-[language]="languageService.currentLanguage"
-languageOptions = '[{ "code": "en"}]'
-applicationName="{{ 'isDomainappName' | translate }}"
-[helpOptions] = 'contactUsOptions'
-[applicationCategory] = 'appCategory'
-[customBreadcrumbs] = ''
->
-</wipo-navbar>
 
-<step>
-    <f-facet name="step-info">
-    <w-sticky-bar [sticky]="sticky" *ngIf="isFiling()" >
-      <w-sticky-bar-link [label]="'filing.pageSecTitle' | translate" [routerLink]="tabcomplaintLink"></w-sticky-bar-link>
-      <w-sticky-bar-link [label]="'filing.pageSec2Title' | translate" [routerLink]="tabresponseLink"></w-sticky-bar-link>
-    </w-sticky-bar>
-  </f-facet>
-</step>
 
 <router-outlet></router-outlet>
 

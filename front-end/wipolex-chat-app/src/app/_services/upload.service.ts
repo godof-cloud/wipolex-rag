@@ -10,25 +10,17 @@ export class UploadService {
   constructor(private http: HttpClient) { }
 
 
-  submitFilingForm(formdata: FormData): Observable<HttpEvent<{}>> {
-    const req = new HttpRequest('POST', environment.apiUrl + 'efiling', formdata, {
+  submitQuestion(question): Observable<HttpEvent<{}>> {
+    let myFormData = new FormData();
+    myFormData.append('question', question);
+    const req = new HttpRequest('POST', environment.apiUrl + 'searchingAnswer', myFormData, {
       reportProgress: true,
       responseType: 'text'
     });
-
     return this.http.request(req);
-
   }
 
-  submitResponseFilingForm(formdata: FormData): Observable<HttpEvent<{}>> {
-    const req = new HttpRequest('POST', environment.apiUrl + 'domain-name-response/efiling', formdata, {
-      reportProgress: true,
-      responseType: 'text'
-    });
-
-    return this.http.request(req);
-
-  }
+ 
 
  
 

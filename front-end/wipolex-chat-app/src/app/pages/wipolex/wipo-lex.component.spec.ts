@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { DomainsComponent } from './domains.component';
+import { WipoLexComponent } from './wipo-lex.component';
 
-describe('DomainsComponent', () => {
-  let component: DomainsComponent;
-  let fixture: ComponentFixture<DomainsComponent>;
+describe('WipoLexComponent', () => {
+  let component: WipoLexComponent;
+  let fixture: ComponentFixture<WipoLexComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DomainsComponent ]
+      declarations: [ WipoLexComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DomainsComponent);
+    fixture = TestBed.createComponent(WipoLexComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -27,10 +27,8 @@ import { LoaderService } from './_services/loader.service';
 
 import localeEs from '@angular/common/locales/es';
 
-import { DomainNamesComponent } from './pages/domain-names/domain-names.component';
-import { DomainsComponent } from './pages/domains/domains.component';
+import { WipoLexComponent } from './pages/wipolex/wipo-lex.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
-import { DomainNamesResponseComponent } from './pages/domain-names-response/domain-names-response.component';
 
 registerLocale(localeEs);
 
@@ -38,11 +36,9 @@ registerLocale(localeEs);
 @NgModule({
   declarations: [
     AppComponent,
-    DomainNamesComponent,
-    DomainsComponent,
+    WipoLexComponent,
     LoaderComponent,
     PageNotFoundComponent,
-    DomainNamesResponseComponent,
   ],
   imports: [
     BrowserModule,

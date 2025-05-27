@@ -115,6 +115,7 @@
 	</dependencyManagement>
 
 	<build>
+		<finalName>wipolex-rag</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
