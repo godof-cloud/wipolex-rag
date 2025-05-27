@@ -32,7 +32,7 @@ Resources:
   InitStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub https://rag-n-rock-artifacts/init.yml
+      TemplateURL: https://rag-n-rock-artifacts.s3.us-west-2.amazonaws.com/init.yml
       Parameters:
         NamePrefix: !Ref NamePrefix
         VpcId: !Ref VpcId
@@ -40,14 +40,14 @@ Resources:
   S3Stack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub https://rag-n-rock-artifacts/s3.yml
+      TemplateURL: https://rag-n-rock-artifacts.s3.us-west-2.amazonaws.com/s3.yml
       Parameters:
         NamePrefix: !Ref NamePrefix
 
   AlbStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub https://rag-n-rock-artifacts/alb.yml
+      TemplateURL: https://rag-n-rock-artifacts.s3.us-west-2.amazonaws.com/alb.yml
       Parameters:
         VpcId: !Ref VpcId
         AlbSubnet1Id: !Ref Subnet1
@@ -58,30 +58,30 @@ Resources:
   EcsStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub https://rag-n-rock-artifacts/ecs-cluster.yml
+      TemplateURL: https://rag-n-rock-artifacts.s3.us-west-2.amazonaws.com/ecs-cluster.yml
       Parameters:
         NamePrefix: !Ref NamePrefix
   
-  ServiceStack:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: !Sub https://rag-n-rock-artifacts/ecs-service.yml
-      Parameters:
-        NamePrefix: !Ref NamePrefix
-        VpcId: !Ref VpcId
-        TaskDefinitionExecutionRoleARN: !GetAtt EcsStack.Outputs.TaskDefinitionExecutionRoleARN
-        TaskDefinitionRoleARN: !GetAtt EcsStack.Outputs.TaskDefinitionRoleARN
-        ContainerSubnetsId: !Join [',', [!Ref Subnet1, !Ref Subnet2] ]
-        ECSSecurityGroup: !GetAtt InitStack.Outputs.ECSSecurityGroup
-        ContainerImage: 090460870492.dkr.ecr.eu-central-1.amazonaws.com/rag-n-rock:latest
-        ServiceName: rag-n-rock
-        ECSCluster: !GetAtt EcsStack.Outputs.ECSCluster
-        AlbListenerRef: !GetAtt AlbStack.Outputs.LoadBalancerListenerRef
+  # ServiceStack:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: https://rag-n-rock-artifacts.s3.us-west-2.amazonaws.com/ecs-service.yml
+  #     Parameters:
+  #       NamePrefix: !Ref NamePrefix
+  #       VpcId: !Ref VpcId
+  #       TaskDefinitionExecutionRoleARN: !GetAtt EcsStack.Outputs.TaskDefinitionExecutionRoleARN
+  #       TaskDefinitionRoleARN: !GetAtt EcsStack.Outputs.TaskDefinitionRoleARN
+  #       ContainerSubnetsId: !Join [',', [!Ref Subnet1, !Ref Subnet2] ]
+  #       ECSSecurityGroup: !GetAtt InitStack.Outputs.ECSSecurityGroup
+  #       ContainerImage: 090460870492.dkr.ecr.eu-central-1.amazonaws.com/rag-n-rock:latest
+  #       ServiceName: rag-n-rock
+  #       ECSCluster: !GetAtt EcsStack.Outputs.ECSCluster
+  #       AlbListenerRef: !GetAtt AlbStack.Outputs.LoadBalancerListenerRef
   
   CloudFrontStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: !Sub https://rag-n-rock-artifacts/cloudfront.yml
+      TemplateURL: https://rag-n-rock-artifacts.s3.us-west-2.amazonaws.com/cloudfront.yml
       Parameters:
         NamePrefix: !Ref NamePrefix
         CloudfrontOAI: !GetAtt S3Stack.Outputs.CloudfrontOAI
