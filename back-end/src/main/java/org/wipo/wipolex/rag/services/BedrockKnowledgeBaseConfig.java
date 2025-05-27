@@ -10,9 +10,9 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.bedrockagent.BedrockAgentClient;
 import software.amazon.awssdk.services.bedrockagentruntime.BedrockAgentRuntimeClient;
 
-@Configuration
+//@Configuration
 public class BedrockKnowledgeBaseConfig {
-    @Bean
+//    @Bean
     public BedrockAgentRuntimeClient bedrockAgentClient(
             @Value("${spring.ai.bedrock.aws.region}") String region,
             @Value("${spring.ai.bedrock.aws.access-key}") String accessKey,
