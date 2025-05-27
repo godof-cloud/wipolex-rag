@@ -15,6 +15,7 @@ export class WipoLexComponent {
   displayResult = false;
 
   submitQuestion() {
+    this.displayResult = false;
     this.answer = '';
     this.blocked = true;
     setTimeout(() => {

@@ -1,4 +1,4 @@
-<w-block-ui [blocked]="blocked" [title]="'processing'" [text]="'please wait'"></w-block-ui>
+<!-- <w-block-ui [blocked]="blocked" [title]="'processing'" [text]="'please wait'"></w-block-ui> -->
 <f-facet name="step-info">
   <w-page-header [title]="'WIPO Lex'" [disableUppercase]="true" [showPortfolio]="false">
   </w-page-header>
@@ -9,8 +9,13 @@
 </w-step>
 
 <w-edit-panel>
+  <w-section *ngIf="blocked">
+    <w-slot style="padding: 10px;">
+      <f-facet name="actions">  Loading...   </f-facet>
+    </w-slot>
+  </w-section>
   <w-section *ngIf="displayResult">
-    <w-slot>
+    <w-slot  style="padding: 10px;">
       <f-facet name="actions">
       &nbsp;Question: {{question}}
       <br>&nbsp;Answer: {{answer}}
@@ -20,10 +25,10 @@
 
   <w-section>
     <w-slot>
-      <w-input-textarea [label]="'Ask Wipo Lex'" [labelOnTop]="true"></w-input-textarea>
+      <w-input-textarea [label]="'Ask WIPO Lex'" [labelOnTop]="true"></w-input-textarea>
     </w-slot>
   </w-section>
-
+  
 </w-edit-panel>
 
 <w-page-header [disableUppercase]="true" [showPortfolio]="false">
