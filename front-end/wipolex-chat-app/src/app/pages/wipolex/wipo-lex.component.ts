@@ -30,5 +30,8 @@ export class WipoLexComponent {
 
   }
 
-  
+  enterQuestion() {
+    this.blocked = true;
+    this.displayResult = false;
+  }
 }
