@@ -24,15 +24,14 @@ Resources:
   FrontendBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub ${NamePrefix}-frontend-${AWS::Region}-${AWS::AccountId}
-      OwnershipControls:
-        Rules:
-          - ObjectOwnership: ObjectWriter
+      BucketName: !Sub ${NamePrefix}-frontend
       PublicAccessBlockConfiguration:
-        BlockPublicAcls: false
-        BlockPublicPolicy: false
-        IgnorePublicAcls: false
-        RestrictPublicBuckets: false
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: index.html

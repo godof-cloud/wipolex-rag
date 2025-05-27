@@ -52,7 +52,6 @@ Resources:
               }
             ]
           }
-    DeletionPolicy: DELETE
 
   ELBSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -75,7 +74,7 @@ Resources:
           IpProtocol: tcp
           FromPort: '443'
           ToPort: '443'
-          SourcePrefixListId: pl-a3a144ca #AWS-managed com.amazonaws.global.cloudfront.origin-facing prefix list
+          SourcePrefixListId: pl-82a045eb #AWS-managed com.amazonaws.global.cloudfront.origin-facing prefix list
      
   ECSSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -122,17 +121,17 @@ Resources:
   #         SourcePrefixListId: pl-077825f18b5d86e6d
 
 Outputs:
-  RepositoryName:
-    Description: Name of the ECR repository
-    Value: !Ref ECRRepository
+  # RepositoryName:
+  #   Description: Name of the ECR repository
+  #   Value: !Ref ECRRepository
   
-  RepositoryURI:
-    Description: URI of the ECR repository
-    Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECRRepository}
+  # RepositoryURI:
+  #   Description: URI of the ECR repository
+  #   Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ECRRepository}
   
-  RepositoryArn:
-    Description: ARN of the ECR repository
-    Value: !GetAtt ECRRepository.Arn
+  # RepositoryArn:
+  #   Description: ARN of the ECR repository
+  #   Value: !GetAtt ECRRepository.Arn
   
   ECSSecurityGroup:
     Value: !Ref ECSSecurityGroup
