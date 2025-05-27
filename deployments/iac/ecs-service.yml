@@ -76,6 +76,12 @@ Mappings:
       Memory: 8192
 
 Resources:
+  CloudwatchLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /${ServiceName}
+      RetentionInDays: 7
+
   ServiceTaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
@@ -94,30 +100,22 @@ Resources:
           LogConfiguration:
             LogDriver: awslogs
             Options:
-              awslogs-group: !Ref ServiceName
+              awslogs-group: !Ref CloudwatchLogGroup
               awslogs-region: !Ref 'AWS::Region'
               awslogs-stream-prefix: 'container'
           PortMappings:
             - ContainerPort: 8080
-          Environment:
-            - Name: DISCOVERY_SERVICE_NAME
-              Value: !Ref ServiceName
-            - Name: DISCOVERY_SERVICE_ID
-              Value: !Ref DiscoveryService
-          Secrets:
-            - ValueName: ValueFrom
-              KeyValuePairs: !Ref SecretParams
 
   ALBTG:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       TargetType: 'ip'
       HealthCheckIntervalSeconds: 10
-      HealthCheckPath: !Sub '/actuator/health'
+      HealthCheckPath: !Sub '/health'
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
-      Name:  !Sub '${namePrefix}-tg-${ServiceName}'
+      Name:  !Sub '${NamePrefix}-tg-${ServiceName}'
       Port: 8080
       Protocol: HTTP
       UnhealthyThresholdCount: 5
@@ -153,6 +151,7 @@ Resources:
         MaximumPercent: 200
       NetworkConfiguration:
         AwsvpcConfiguration:
+            AssignPublicIp: ENABLED
             SecurityGroups:
                 - !Ref ECSSecurityGroup
             Subnets: !Ref ContainerSubnetsId

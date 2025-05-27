@@ -6,5 +6,5 @@ COPY target/wipolex-rag.jar /app/wipolex-rag.jar
 
 EXPOSE 8080
 
-WORKDIR /elisbon
+WORKDIR /app
 ENTRYPOINT ["java","-jar", "wipolex-rag.jar"]

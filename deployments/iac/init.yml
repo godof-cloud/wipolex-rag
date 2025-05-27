@@ -88,12 +88,18 @@ Resources:
           FromPort: '8080'
           ToPort: '8080'
           SourceSecurityGroupId: !Ref ELBSecurityGroup
-        # - Description: Ingress to VPC for all ports
-        #   IpProtocol: tcp
-        #   CidrIp: !Ref vpcCidrBlock
-        #   FromPort: 0
-        #   ToPort: 65535
-          
+          # - Description: Ingress to VPC for all ports
+          #   IpProtocol: tcp
+          #   CidrIp: !Ref vpcCidrBlock
+          #   FromPort: 0
+          #   ToPort: 65535
+      SecurityGroupEgress:
+        - Description: Allow outbound HTTPS traffic to ECR and other AWS services
+          IpProtocol: 'tcp'
+          FromPort: '443'
+          ToPort: '443'
+          CidrIp: '0.0.0.0/0'
+       
   # WipoPrefixListSecurityGroupHttp:
   #   Type: AWS::EC2::SecurityGroup
   #   Properties:

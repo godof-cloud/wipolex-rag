@@ -62,21 +62,21 @@ Resources:
       Parameters:
         NamePrefix: !Ref NamePrefix
   
-  # ServiceStack:
-  #   Type: AWS::CloudFormation::Stack
-  #   Properties:
-  #     TemplateURL: https://rag-n-rock-artifacts.s3.us-west-2.amazonaws.com/ecs-service.yml
-  #     Parameters:
-  #       NamePrefix: !Ref NamePrefix
-  #       VpcId: !Ref VpcId
-  #       TaskDefinitionExecutionRoleARN: !GetAtt EcsStack.Outputs.TaskDefinitionExecutionRoleARN
-  #       TaskDefinitionRoleARN: !GetAtt EcsStack.Outputs.TaskDefinitionRoleARN
-  #       ContainerSubnetsId: !Join [',', [!Ref Subnet1, !Ref Subnet2] ]
-  #       ECSSecurityGroup: !GetAtt InitStack.Outputs.ECSSecurityGroup
-  #       ContainerImage: 090460870492.dkr.ecr.eu-central-1.amazonaws.com/rag-n-rock:latest
-  #       ServiceName: rag-n-rock
-  #       ECSCluster: !GetAtt EcsStack.Outputs.ECSCluster
-  #       AlbListenerRef: !GetAtt AlbStack.Outputs.LoadBalancerListenerRef
+  ServiceStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://rag-n-rock-artifacts.s3.us-west-2.amazonaws.com/ecs-service.yml
+      Parameters:
+        NamePrefix: !Ref NamePrefix
+        VpcId: !Ref VpcId
+        TaskDefinitionExecutionRoleARN: !GetAtt EcsStack.Outputs.TaskDefinitionExecutionRoleARN
+        TaskDefinitionRoleARN: !GetAtt EcsStack.Outputs.TaskDefinitionRoleARN
+        ContainerSubnetsId: !Join [',', [!Ref Subnet1, !Ref Subnet2] ]
+        ECSSecurityGroup: !GetAtt InitStack.Outputs.ECSSecurityGroup
+        ContainerImage: 236695623493.dkr.ecr.us-west-2.amazonaws.com/wipolex-rag:latest
+        ServiceName: rag-n-rock
+        ECSCluster: !GetAtt EcsStack.Outputs.ECSCluster
+        AlbListenerRef: !GetAtt AlbStack.Outputs.LoadBalancerListenerRef
   
   CloudFrontStack:
     Type: AWS::CloudFormation::Stack
