@@ -14,11 +14,11 @@ export class LanguageService {
   defaultLanguage = 'en'; // Default language
   currentLanguage;
 
-  constructor(private translate: TranslateService, private cookieService: CookieService) { }
+  constructor(private cookieService: CookieService) { }
 
   public initialLanguageSetup() {
-    this.translate.addLangs(this.supportedLanguages);
-    this.translate.setDefaultLang(this.defaultLanguage);
+    // this.translate.addLangs(this.supportedLanguages);
+    // this.translate.setDefaultLang(this.defaultLanguage);
 
     const queryLang = this.getQueryParameterByName(environment.languageQueryParamName);
     const cookieLang = this.cookieService.get(this.AMC_LANGUAGE_COOKIE);
@@ -35,13 +35,13 @@ export class LanguageService {
 
   public changeLanguage() {
     // Reset language
-    const languages = this.translate.getLangs();
-    languages.forEach(lang => {
-      this.translate.resetLang(lang);
-    });
+    // const languages = this.translate.getLangs();
+    // languages.forEach(lang => {
+    //   this.translate.resetLang(lang);
+    // });
 
     this.cookieService.set(this.AMC_LANGUAGE_COOKIE, this.currentLanguage, undefined, '/', this.AMC_LANGUAGE_COOKIE_DOMAIN);
-    this.translate.use(this.cookieService.get(this.AMC_LANGUAGE_COOKIE));
+    // this.translate.use(this.cookieService.get(this.AMC_LANGUAGE_COOKIE));
   }
 
   public isLanguageSupported(lang: string): boolean {
