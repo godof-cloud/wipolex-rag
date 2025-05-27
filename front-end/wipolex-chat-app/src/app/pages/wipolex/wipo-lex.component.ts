@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UploadService } from 'src/app/_services/upload.service';
 
 @Component({
   selector: 'app-wipo-chat',
@@ -7,17 +8,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WipoLexComponent {
 
-  constructor() { }
-  question :string = '';
-  answer :string = '';
+  constructor(private uploadService: UploadService) { }
+  question: string = '';
+  answer: string = '';
   blocked = false;
   displayResult = false;
 
   submitQuestion() {
+    this.answer = '';
     this.blocked = true;
-    this.displayResult = true;
-    this.question = 'What is your name?'
-    this.answer = 'Tarun';
-    this.blocked = false;
+    setTimeout(() => {
+      // this.uploadService.submitQuestion(this.question).subscribe(
+      //   response => {
+          this.displayResult = true;
+          this.question = 'What is your name?'
+          this.answer = 'test test';
+          this.blocked = false;
+        // });
+    }, 500);
+
   }
 }
