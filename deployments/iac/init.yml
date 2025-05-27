@@ -72,8 +72,8 @@ Resources:
         #   SourceSecurityGroupId: !Ref WipoPrefixListSecurityGroupHttps
         - Description: Allow HTTPS access from Cloudfront IPs
           IpProtocol: tcp
-          FromPort: '443'
-          ToPort: '443'
+          FromPort: '80'
+          ToPort: '80'
           SourcePrefixListId: pl-82a045eb #AWS-managed com.amazonaws.global.cloudfront.origin-facing prefix list
      
   ECSSecurityGroup:
