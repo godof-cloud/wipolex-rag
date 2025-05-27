@@ -1,0 +1,33 @@
+
+<f-facet name="step-info">
+  <w-page-header [title]="'WIPO Lex'" [disableUppercase]="true"
+    [showPortfolio]="false">
+  </w-page-header>
+</f-facet>
+
+
+<w-step>
+  <p facet-step-info>To assist parties in researching and preparing their UDRP filings, the WIPO Center also provides
+    the following jurisprudential tools and supporting resources.</p>
+</w-step>
+
+<w-block-ui [blocked]="blocked" [title]="'processing' | translate" [text]="'please_wait' | translate"></w-block-ui>
+
+<!-- <form [formGroup]="requestForm"  enctype="multipart/form-data" > -->
+ 
+  <w-edit-panel>
+    <w-section>
+      <w-slot>
+        <w-input-textarea [label]="'filing.complainantFullName' | translate" [labelOnTop]="true" [required]="true" maxLength="255"
+          >
+          <!-- <f-facet name="error" *ngIf="submitted && f.complainantFullName.errors?.required">{{'validationWarning' | translate  }}</f-facet> -->
+        </w-input-textarea>
+      
+      </w-slot>
+
+   </w-section>
+
+  </w-edit-panel>
+
+
+<!-- </form> -->

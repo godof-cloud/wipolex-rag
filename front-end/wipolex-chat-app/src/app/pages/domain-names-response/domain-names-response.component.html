@@ -1,0 +1,237 @@
+<w-block-ui [blocked]="blocked" [title]="'processing' | translate" [text]="'please_wait' | translate"></w-block-ui>
+
+<form [formGroup]="requestForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()">
+
+  <w-page-header [title]="'response.pageTitle' | translate" [disableUppercase]="true" [showPortfolio]="false">
+  </w-page-header>
+
+
+  <w-step>
+    <f-facet name="step-content-top">
+      <w-view-panel type="important">
+        <f-facet name="section-folded">
+          <p facet-step-info [innerHTML]="'response.description' | translate "></p>
+        </f-facet>
+      </w-view-panel>
+      <w-view-panel>
+        <f-facet name="section-unfolded">
+          <p facet-step-info [innerHTML]="'response.rulesDetails' | translate "></p>
+        </f-facet>
+        <f-facet name="section-folded">
+          <p facet-step-info [innerHTML]="'response.rulesLabel' | translate "></p>
+        </f-facet>
+      </w-view-panel>
+    </f-facet>
+  </w-step>
+
+  <br>
+  <w-page-header [title]="'response.pageSecTitle' | translate" [disableUppercase]="true" [showPortfolio]="false">
+  </w-page-header>
+
+  <w-edit-panel>
+    <w-section>
+      <w-slot>
+        <w-input-text [label]="'response.caseNumber' | translate" [labelOnTop]="true" [required]="true" maxLength="128"
+          formControlName="caseNumber" [info]="'response.pageSecDesc' | translate">
+          <f-facet name="error" *ngIf="submitted && f.caseNumber.errors?.required">{{'validationWarning' | translate  }}</f-facet>
+        </w-input-text>
+      </w-slot>
+    </w-section>
+  </w-edit-panel>
+
+  <w-page-header [title]="'response.pageSec2Title' | translate" [disableUppercase]="true" [showPortfolio]="false">
+  </w-page-header>
+
+  <w-edit-panel>
+    <w-section>
+      <w-slot>
+        <w-input-text [label]="'response.respondentFullName' | translate" [labelOnTop]="true" [required]="true" maxLength="255"
+          formControlName="respondentFullName">
+          <f-facet name="error" *ngIf="submitted && f.respondentFullName.errors?.required">{{'validationWarning' | translate  }}</f-facet>
+        </w-input-text>
+      </w-slot>
+
+      <w-slot>
+        <w-input-text [label]="'response.respondentEmail' | translate" [labelOnTop]="true" [required]="true" maxLength="255"
+          formControlName="respondentEmail" [info]="'response.respondentEmailInfo' | translate"
+          [hidden]="displayAuthRepField">
+          <f-facet name="error" *ngIf="submitted && f.respondentEmail.errors?.required">{{'validationWarning' |   translate }}</f-facet>
+          <f-facet name="error" *ngIf="f.respondentEmail.errors?.invalidEmails">{{'validationEmail' |  translate}}</f-facet>
+        </w-input-text>
+      </w-slot>
+
+    </w-section>
+
+    <w-section>
+      <w-slot>
+        <w-select-one [label]="'response.respondentCountry' | translate" [labelOnTop]="true" [required]="true"
+          formControlName="respondentCountry" [options]="countryOptions">
+          <f-facet name="error" *ngIf="submitted && f.respondentCountry.errors?.required">{{'validationWarning' | translate  }}</f-facet>
+        </w-select-one>
+      </w-slot>
+    </w-section>
+
+    <w-section>
+      <w-slot>
+        <w-select-one [label]="'response.respondentAuthRepType' | translate" [labelOnTop]="true" [required]="true"
+          (change)="selectAuthRepType(this.requestForm)" [options]="'filing.optionsAuthRepType' | translate"
+          formControlName="respondentAuthRepType" [info]="'response.respondentAuthRepTypeInfo' | translate">
+          <f-facet name="error" *ngIf="submitted && f.respondentAuthRepType.errors?.required">{{'validationWarning' | translate  }}</f-facet>
+        </w-select-one>
+      </w-slot>
+    </w-section>
+
+
+
+    <w-section *ngIf="displayAuthRepField">
+      <w-slot>
+        <w-input-text [label]="'response.respondentAuthRepFullName' | translate" [labelOnTop]="true" [required]="true" maxLength="255"
+          formControlName="respondentAuthRepFullName" [hidden]="displayAuthRepField">
+          <f-facet name="error"
+            *ngIf="displayAuthRepField && submitted && f.respondentAuthRepFullName.errors?.required">{{'validationWarning' | translate  }}</f-facet>
+        </w-input-text>
+
+        <w-select-one [label]="'response.respondentAuthRepCountry' | translate" [labelOnTop]="true" [required]="true"
+          formControlName="respondentAuthRepCountry" [options]="countryOptions" [hidden]="displayAuthRepField">
+          <f-facet name="error"
+            *ngIf="displayAuthRepField && submitted && f.respondentAuthRepCountry.errors?.required">{{'validationWarning' |  translate  }}</f-facet>
+        </w-select-one>
+
+
+      </w-slot>
+
+      <w-slot>
+
+        <w-input-text label="{{displayAuthRepFieldLabel}}"[labelOnTop]="true" [required]="true" maxLength="255"
+          formControlName="respondentAuthRepLawFirm" [hidden]="displayAuthRepField">
+          <f-facet name="error"
+            *ngIf="displayAuthRepField && submitted && f.respondentAuthRepLawFirm.errors?.required">{{'validationWarning' | translate }}</f-facet>
+        </w-input-text>
+        <w-input-text [label]="'response.respondentAuthRepEmail' | translate" [labelOnTop]="true" [required]="true" maxLength="255"
+          formControlName="respondentAuthRepEmail" [info]="'response.respondentAuthRepEmailInfo' | translate"
+          [hidden]="displayAuthRepField">
+          <f-facet name="error"  *ngIf="displayAuthRepField && submitted && f.respondentAuthRepEmail.errors?.required">
+            {{'validationWarning' |  translate }}</f-facet>
+          <f-facet name="error"  *ngIf="displayAuthRepField && f.respondentAuthRepEmail.errors?.invalidEmails">{{'validationEmail'| translate}}</f-facet>
+        </w-input-text>
+      </w-slot>
+    </w-section>
+
+
+  </w-edit-panel>
+
+
+  <w-page-header [title]="'response.pageSec3Title' | translate" [disableUppercase]="true" [showPortfolio]="false">
+  </w-page-header>
+
+
+  <w-edit-panel>
+    <w-section>
+      <w-slot>
+        <w-input-text [label]="'response.domainName' | translate" [labelOnTop]="true" [required]="true" maxLength="800"
+          formControlName="domainName" [info]="'response.domainNameInfo' | translate">
+          <f-facet name="error" *ngIf="submitted && f.domainName.errors?.required">{{'validationWarning' | translate }}</f-facet>
+        </w-input-text>
+      </w-slot>
+    </w-section>
+  </w-edit-panel>
+
+  <w-edit-panel>
+    <w-section>
+      <w-slot>
+        <w-input-text [label]="'response.complainantRepresentativeTitle' | translate"  formControlName="complainantRepresentativeEmail" maxLength="255">
+          <f-facet name="info" [innerHTML]="'response.complainantRepresentativeEmailInfo' | translate"></f-facet>
+          <f-facet name="error" *ngIf="f.complainantRepresentativeEmail.errors?.invalidEmails">{{'validationEmail' |  translate}}</f-facet>
+        </w-input-text>
+      </w-slot>
+    </w-section>
+  </w-edit-panel>
+
+
+  <w-page-header [title]="'response.pageSec4Title' | translate" [disableUppercase]="true" [showPortfolio]="false">
+  </w-page-header>
+
+
+  <w-edit-panel>
+    <w-section>
+      <w-slot>
+        <w-input-textarea  [required]="true" formControlName="response" maxLength="4000">
+          <f-facet name="error" *ngIf="submitted && f.response.errors?.required">{{'validationWarning' | translate }}</f-facet>
+          <f-facet name="info" [innerHTML]="'response.responseDesc' | translate"></f-facet>
+        </w-input-textarea>
+      </w-slot>
+    </w-section>
+  </w-edit-panel>
+
+  <w-page-header [title]="'response.uploadRespondentTitle' | translate" [disableUppercase]="true" [showPortfolio]="false">
+  </w-page-header>
+
+  <w-edit-panel>
+    <w-section>
+      <w-slot>
+        <w-input-file [isLarge]="false" [multiple]="true" [sizeLimit]="10000000" 
+          [label]="'response.uploadRespondentLable' | translate" [labelSelect]="'response.ADD_DOCUMENT' | translate"
+          [invalidFileSizeMessageSummary]="'ValidFileSize' | translate" [showUploadButton]="false" [auto]="false"
+          (wSelected)="onFileChange('responsefileAttachment',$event)" formControlName="responsefileAttachment">
+          <f-facet name="info" [innerHTML]="'response.uploadRespondent' | translate"> </f-facet>
+        </w-input-file>
+      </w-slot>
+    </w-section>
+  </w-edit-panel>
+
+  <w-page-header [title]="'response.uploadAnnexesTitle' | translate" [disableUppercase]="true" [showPortfolio]="false">
+  </w-page-header>
+
+  <w-edit-panel>
+    <w-section>
+      <w-slot>
+        <w-input-file [isLarge]="false" [multiple]="true" [sizeLimit]="10000000" 
+          [label]="'response.uploadAnnexesLabel' | translate" [labelSelect]="'response.ADD_DOCUMENT' | translate"
+          [invalidFileSizeMessageSummary]="'ValidFileSize' | translate" [showUploadButton]="false" [auto]="false"
+          (wSelected)="onFileChange('annexesfileAttachment',$event)" formControlName="annexesfileAttachment">
+          <f-facet name="info" [innerHTML]="'response.uploadAnnexes' | translate"> </f-facet>
+        </w-input-file>
+      </w-slot>
+    </w-section>
+  </w-edit-panel>
+
+  <w-view [center]="false" [textPosition]="'start'">
+
+    <f-facet name="description">
+      <re-captcha formControlName="g_recaptcha_response" siteKey="{{siteKey}}"></re-captcha>
+    </f-facet>
+    <f-facet name="footer" *ngIf="submitted && f.g_recaptcha_response.errors?.required">
+      <w-validation-panel [type]="'error'" [summary]="'captchError'| translate"></w-validation-panel>
+    </f-facet>
+  </w-view>
+
+
+
+  <w-page-header [disableUppercase]="true" [showPortfolio]="false">
+    <f-facet name="actions">
+      <button w-button [isDefault]="true" [isSecondary]="false" [disabled]="false" [buttonType]="'text'" type="submit"
+        (click)="onSubmit()">
+        {{ 'response.submitResponse' | translate }}
+      </button>
+    </f-facet>
+  </w-page-header>
+
+</form>
+
+
+
+
+<w-dialog *ngIf="isOpen" [style]="style">
+  <w-step [title]="'response.alerTitle' | translate" [reviewMode]="true">
+    <div facet-step-info [innerHTML]="'response.alerText' | translate"></div>
+    <button w-button (click)="closeDialogbox()" facet-step-actions>OK</button>
+  </w-step>
+</w-dialog>
+
+
+<w-dialog *ngIf="totalFileSizeDialogbox" [style]="style">
+  <w-step [title]="'errorTitle' | translate" [reviewMode]="true">
+    <div facet-step-info [innerHTML]="'validationTotalFileSize'| translate"></div>
+    <button w-button (click)="closeTotalFileSizeDialogbox()" facet-step-actions>OK</button>
+  </w-step>
+</w-dialog>

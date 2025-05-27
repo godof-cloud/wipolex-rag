@@ -1,0 +1,6 @@
+<w-dialog *ngIf="loading" [style]="style">
+    <w-step [title]="title" [reviewMode]="true">
+        <div facet-step-info [innerHTML]="message"></div>
+        <button w-button (click)="closeDialogbox()" facet-step-actions>OK</button>
+    </w-step>
+  </w-dialog>

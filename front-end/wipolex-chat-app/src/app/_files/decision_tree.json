@@ -1,0 +1,18 @@
+{
+    "copyrightOptions": [
+        {"label": "I need information on mediation for copyright or content disputes", "value" : "informationCopyrght"},
+        {"label": "I am involved in a copyright or content dispute", "value": "involvedcopyrght"}
+      ],
+      "disputesOptions" : [
+        {"label": "The dispute is related to a contract.", "value": "disputeRelatedContract"},
+        {"label": "The dispute is related to a non contractual infringement.", "value": "disputeRelatedNoContract"}
+      ],
+      "disputeRelatedContractOptions":[
+        {"label": "There is a WIPO Mediation clause in the contract", "value": "wipoMediationClausesContract"},
+        {"label": "There is no WIPO Mediation clause in the contract", "value": "noWipoMediationClausesContract"}
+      ],
+      "copyrghtContentDispute" :[
+        {"label": "I would like to include a dispute resolution clause in a contract", "value": "adrClausesGenerator"},
+        {"label": "I would like to access information resources", "value": "adrClausesPublicationOthrResource"}
+      ]   
+}

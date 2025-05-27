@@ -1,0 +1,47 @@
+{
+      "copyrightOptions": [
+        { "label": "I am currently involved in a copyright- or content-related dispute", "value" : "involvedcopyrght"},
+        { "label": "I would like to contact the WIPO Arbitration and Mediation Center", "value": "contactcenter"},
+        { "label": "I am looking for information on WIPO mediation for copyright- and content-related disputes", "value":"informationcopyrght"},
+        { "label": "I am looking for information on WIPO dispute resolution options for other types of disputes", "value":"informationresolution"}
+      ],
+      "involvedcopyrght_options": [
+        { "label": "I need procedural guidance on WIPO ADR", "value" : "wipoADRLink"},
+        { "label": "The dispute is related to a contract with another party", "value": "contractanotherparty"},
+        { "label": "The dispute is related to a non-contractual infringement by another party", "value":"noncontractanotherparty"}
+      ],
+      "contractanotherparty_options":[
+        { "label": "There is a WIPO Mediation clause in the contract", "value" : "wipomediation"},
+        { "label": "There is no WIPO Mediation clause in the contract", "value" : "nowipomediation"}
+      ],
+      "wipomediation_options":[
+        { "label": "I need procedural guidance on WIPO ADR", "value" : "wipoADRLink"},
+        { "label": "File Request for WIPO Mediation", "value" : "filewipomeduationLink"}
+      ],
+      "nowipomediation_options":[
+        { "label": "I need procedural guidance on WIPO ADR", "value" : "wipoADRLink"},
+        { "label": "Invite the other party to consider WIPO Mediation", "value" : "inviteotherpartywipomediationLink"}
+      ],
+      "noncontractanotherparty_options":[
+        { "label": "I need procedural guidance on WIPO ADR", "value" : "wipoADRLink"},
+        { "label": "Invite the other party to consider WIPO Mediation", "value" : "wipoMediationLink"}
+      ],
+      "contactcenter_options": [
+        { "label": "By email", "value" : "contactByEmail"},
+        { "label": "By telephone", "value" : "contactByTelephone"},
+        { "label": "By social media channels", "value" : "contactBysocialmediachannels"},
+        { "label": "I need procedural guidance on WIPO ADR", "value" : "wipoADRLink"}
+      ],
+      "informationcopyrght_options": [
+        { "label": "I would like to include a dispute resolution clause in a contract", "value" : "disputeResolutionContract"},
+        { "label": "I would like to access information resources on mediation", "value" : "informationResourceMeditation"},
+        { "label": "I need procedural guidance on WIPO ADR", "value" : "wipoADRLink"}
+      ],
+      "informationresolution_options": [
+        { "label": "By email", "value" : "contactByEmail"},
+        { "label": "By telephone", "value" : "contactByTelephone"},
+        { "label": "By social media channels", "value" : "contactBysocialmediachannels"},
+        { "label": "I need procedural guidance on WIPO ADR", "value" : "wipoADRLink"}
+      ]
+     
+}
