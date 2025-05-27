@@ -14,7 +14,7 @@ import software.amazon.awssdk.services.bedrockagentruntime.model.KnowledgeBaseVe
 import software.amazon.awssdk.services.bedrockagentruntime.model.RetrieveRequest;
 import software.amazon.awssdk.services.bedrockagentruntime.model.RetrieveResponse;
 
-@Service
+//@Service
 public class BedrockKnowledgeBaseService {
 
 	private final BedrockAgentRuntimeClient bedrockAgentRuntimeClient;
