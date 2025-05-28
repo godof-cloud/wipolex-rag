@@ -89,10 +89,10 @@ registerLocale(localeEs);
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA ],
   providers: [
-   {
-     provide: APP_BASE_HREF,
-     useValue: environment.contextIsRoot ? '/' : '/' + (window.location.pathname.split('/')[1] || '')
-   },    
+  //  {
+  //    provide: APP_BASE_HREF,
+  //    useValue: environment.contextIsRoot ? '/' : '/' + (window.location.pathname.split('/')[1] || '')
+  //  },    
    
     {
       provide: APP_INITIALIZER,
