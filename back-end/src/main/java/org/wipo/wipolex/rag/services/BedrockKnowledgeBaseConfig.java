@@ -1,4 +1,4 @@
-package org.wipo.wipolex.rag.services;
+/*package org.wipo.wipolex.rag.services;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -25,4 +25,4 @@ public class BedrockKnowledgeBaseConfig {
             ))
             .build();
     }
-}
+}*/
