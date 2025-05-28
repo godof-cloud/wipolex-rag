@@ -33,11 +33,11 @@ export class WipoLexComponent {
             console.log('API call successful!', response);
             if(response.type === 4 ) {
             // console.log("response---",response)
-            const jsonResponse = JSON.parse(this.cleanStringValue(response?.body));
+            // const jsonResponse = JSON.parse(this.cleanStringValue(response?.body));
             // console.log('jsonResponse ---',jsonResponse)
             this.displayResult = true;
-            this.conversation.push({user: 'AI Assistant', text: jsonResponse.answer});
-            if(jsonResponse.references.length > 0) {  this.conversation.push({references:jsonResponse.references}); }
+            this.conversation.push({user: 'AI Assistant', text: response?.body});
+            // if(jsonResponse.references.length > 0) {  this.conversation.push({references:jsonResponse.references}); }
            setTimeout(() => {
             this.blocked = false;
             this.question = '';

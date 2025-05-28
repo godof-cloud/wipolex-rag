@@ -24,14 +24,15 @@
         <div>&nbsp;</div>
         <div *ngIf="item.user === 'AI Assistant'" class="textAlignleft">
           <b>{{item.user}}</b> 
-          <br>{{item.text}}
+          <br>
+          <div [innerHTML]="item.text"></div>
         </div>
-        <div *ngIf="item.references">
+        <!-- <div *ngIf="item.references">
         <b>References</b> : 
           <span *ngFor="let ref of item.references;">
             <br>{{ ref.title }} <b>[{{ref.refNum}}]</b>
           </span>
-        </div>
+        </div> -->
         <!-- <f-facet *ngFor="let ref of references;" name="actions">
           <b>{{ref}}</b>
         </f-facet> -->
