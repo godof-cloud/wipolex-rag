@@ -1,7 +1,5 @@
 package org.wipo.wipolex.rag.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.wipo.wipolex.rag.model.LLMRequest;
 import org.wipo.wipolex.rag.services.KnowledgeBaseService;
 import org.wipo.wipolex.rag.services.RagEvaluationService;
 
@@ -47,8 +46,8 @@ private static final Logger log = LoggerFactory.getLogger(AiAssistantController.
 	    }
 	
 		@PostMapping("/api/evaluation")
-		ResponseEntity<String> inquire(@RequestBody List<String> questions) {
-			String evaluationJson = evaluationService.generateEvaluationFile(questions);
+		ResponseEntity<String> inquire(@RequestBody LLMRequest request) {
+			String evaluationJson = evaluationService.generateEvaluationFile(request.question());
 	        
 	        HttpHeaders headers = new HttpHeaders();
 	        headers.setContentType(MediaType.APPLICATION_JSON);

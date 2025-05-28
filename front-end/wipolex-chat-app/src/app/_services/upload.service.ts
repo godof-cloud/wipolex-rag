@@ -44,13 +44,17 @@ export class UploadService {
   }
 
   submitQuestion(question, user): Observable<any> {
-    let myFormData = new FormData();
-    myFormData.append('question', question);
-    const req = new HttpRequest('GET', environment.apiUrl + user + '/inquire?question=' + question, {
+    const req = new HttpRequest('POST', environment.apiUrl + user + '/inquire', 
+    { question: question },  // Body payload as JSON object
+    {
       reportProgress: true,
-      responseType: 'text'
-    });
-    return this.http.request(req);
+      responseType: 'text',
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    }
+  );
+  return this.http.request(req);
 
   }
 

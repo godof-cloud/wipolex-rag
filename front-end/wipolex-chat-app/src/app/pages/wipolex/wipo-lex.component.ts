@@ -78,6 +78,8 @@ const multipleSpacesRegex = /\s\s+/g;
   
     // 2. Replace multiple spaces (including newlines, tabs) with a single space
     cleanedText = cleanedText.replace(multipleSpacesRegex, ' ');
+
+    cleanedText = cleanedText.replace('""', '\'');
   
     // 3. Trim leading/trailing whitespace
     cleanedText = cleanedText.trim();

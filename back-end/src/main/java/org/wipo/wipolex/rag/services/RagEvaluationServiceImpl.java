@@ -8,8 +8,12 @@ import java.util.stream.Collectors;
 
 import javax.swing.text.Document;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.wipo.wipolex.rag.controller.AiAssistantController;
 import org.wipo.wipolex.rag.model.Citation;
 import org.wipo.wipolex.rag.model.ContentItem;
 import org.wipo.wipolex.rag.model.ConversationTurn;
@@ -27,6 +31,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class RagEvaluationServiceImpl implements RagEvaluationService {
 
+	private static final Logger log = LoggerFactory.getLogger(RagEvaluationServiceImpl.class);
+	
 	@Autowired
     private ObjectMapper objectMapper;
 	
@@ -34,22 +40,18 @@ public class RagEvaluationServiceImpl implements RagEvaluationService {
 	private AiModelService aiModelService;
 	
 	@Override
-	public String generateEvaluationFile(List<String> questions) {
+	public String generateEvaluationFile(String question) {
         try {
-        	
-        	List<ConversationTurn> turns = new ArrayList<>();
-        	
-        	for (String question : questions) {
-				LLMResponse llmResponse = processQuestion(question);
-				
-				if (Objects.nonNull(llmResponse) && Objects.nonNull(llmResponse.details())) {
-					turns.addAll(llmResponse.details().conversationTurns());
-				}
+			LLMResponse llmResponse = processQuestion(question);
+			if (Objects.nonNull(llmResponse) && Objects.nonNull(llmResponse.details())) {
+				return objectMapper.writeValueAsString(llmResponse.details());
 			}
-        	
-                
-            Evaluation evaluationFile = new Evaluation(turns);
-            return objectMapper.writeValueAsString(evaluationFile);
+			
+			return "{}";
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException("Error processing LLM response", e);
+		} catch (NullPointerException e) {
+			throw new RuntimeException("LLM response or details are null", e);
         } catch (Exception e) {
             throw new RuntimeException("Error generating evaluation file", e);
         }
@@ -62,8 +64,10 @@ public class RagEvaluationServiceImpl implements RagEvaluationService {
 			
 			llmResponseParsed = objectMapper.readValue(llmResponse, LLMResponse.class);
 		} catch (JsonMappingException e) {
+			log.error(e.getMessage(), e);
 			return null;
 		} catch (JsonProcessingException e) {
+			log.error(e.getMessage(), e);
 			return null;
 		}
                 

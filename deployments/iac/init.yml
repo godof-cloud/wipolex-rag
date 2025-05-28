@@ -105,7 +105,7 @@ Resources:
     Properties:
       Description: AWS Credentials
       Name: !Sub /${NamePrefix}/aws/settings
-      SecretString: !Sub '{"accessKey":"TBD","secretKey":"TBD","sessionToken":"TBD"}'
+      SecretString: !Sub '{"accessKey":"TBD","secretKey":"TBD","sessionToken":"TBD", "knowledgeBaseId":"TBD", "modelId":"TBD"}'
 
 Outputs:
   # RepositoryName:

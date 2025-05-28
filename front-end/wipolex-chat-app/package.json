@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --configuration=local --port=4400",
+    "start": "ng serve --configuration=local --proxy-config proxy.conf.json --port=4400",
     "build": "ng build",
     "deploy": "npm run build-dev && aws --profile rag-n-rock s3 sync dist/wipolex-chat s3://rag-n-rock-frontend",
     "build-dev": "ng build -c dev",

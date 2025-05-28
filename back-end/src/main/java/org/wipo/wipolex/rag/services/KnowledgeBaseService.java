@@ -22,10 +22,10 @@ public class KnowledgeBaseService {
 		this.bedrockAgentRuntimeClient = bedrockAgentRuntimeClient;
 	}
 
-	@Value("${aws.bedrock.knowledgebase.id:UVS5FXQQJR}")
+	@Value("${aws.bedrock.knowledgebase.id}")
 	private String knowledgeBaseId;
 
-	@Value("${aws.bedrock.model.id:anthropic.claude-3-5-haiku-20241022-v1:0}")
+	@Value("${aws.bedrock.model.id}")
 	private String modelId;
 
 	public RetrieveResponse retrieveFromKnowledgeBase(String query) {
