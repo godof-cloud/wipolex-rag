@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.wipo.wipolex.rag.config.ModelConstants;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,6 +64,8 @@ public class AiModelServiceImpl implements AiModelService {
 	    try {
 	        // Create the messages format payload for Claude 3
 	        Map<String, Object> requestPayload = new HashMap<>();
+	        String systemPrompt = ModelConstants.SYSTEM_PROMPT;
+	        requestPayload.put("system", systemPrompt);
 	        
 	        // User message with knowledge context and query
 	        Map<String, Object> userMessage = new HashMap<>();

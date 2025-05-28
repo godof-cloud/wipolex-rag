@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.wipo.wipolex.rag.config.ModelConstants;
 import org.wipo.wipolex.rag.services.KnowledgeBaseService;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -82,17 +83,18 @@ public class AiAssistantController {
 	    try {
 	        // Create the messages format payload for Claude 3
 	        Map<String, Object> requestPayload = new HashMap<>();
-	        String systemPrompt = "You are an AI assistant that processes knowledge context and responds to queries. " +
-	                "EXTREMELY IMPORTANT: Your response MUST ALWAYS be formatted as a valid JSON object with EXACTLY two fields:\n" +
-	                "1. 'answer': A thorough answer to the user's query based ONLY on the provided knowledge context\n" +
-	                "2. 'references': An array of source identifiers (e.g. 'Source 1', 'Source 2') that you referenced in your answer\n\n" +
-	                "Example of the ONLY valid response format:\n" +
-	                "{\n" +
-	                "  \"answer\": \"Your detailed answer goes here...\",\n" +
-	                "  \"references\": [\"Source 1\", \"Source 2\"]\n" +
-	                "}\n\n" +
-	                "DO NOT include any other fields in your JSON. DO NOT structure your answer as JSON within JSON. " +
-	                "The entire response must be valid JSON that can be directly parsed.";
+//	        String systemPrompt = "You are an AI assistant that processes knowledge context and responds to queries. " +
+//	                "EXTREMELY IMPORTANT: Your response MUST ALWAYS be formatted as a valid JSON object with EXACTLY two fields:\n" +
+//	                "1. 'answer': A thorough answer to the user's query based ONLY on the provided knowledge context\n" +
+//	                "2. 'references': An array of source identifiers (e.g. 'Source 1', 'Source 2') that you referenced in your answer\n\n" +
+//	                "Example of the ONLY valid response format:\n" +
+//	                "{\n" +
+//	                "  \"answer\": \"Your detailed answer goes here...\",\n" +
+//	                "  \"references\": [\"Source 1\", \"Source 2\"]\n" +
+//	                "}\n\n" +
+//	                "DO NOT include any other fields in your JSON. DO NOT structure your answer as JSON within JSON. " +
+//	                "The entire response must be valid JSON that can be directly parsed.";
+	        String systemPrompt = ModelConstants.SYSTEM_PROMPT;
 	        requestPayload.put("system", systemPrompt);
 	      /*  Map<String, Object> systemMessage = new HashMap<>();
 	        systemMessage.put("role", "assistant");

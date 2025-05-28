@@ -1,4 +1,4 @@
-package org.wipo.wipolex.rag.model;
+package org.wipo.wipolex.rag.config;
 
 public class ModelConstants {
 
