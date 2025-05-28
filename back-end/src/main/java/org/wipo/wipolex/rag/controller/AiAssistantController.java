@@ -48,14 +48,6 @@ public class AiAssistantController {
 	        this.knowledgeBaseService = knowledgeBaseService;
 	        this.bedrockClient = bedrockClient;
 	    }
-//	 @Autowired(required = false)
-//	    public void setBedrockClient(BedrockRuntimeClient bedrockClient) {
-//		 AwsSessionCredentials sessionCredentials = AwsSessionCredentials.create(accessKeyId, secretKey, sessionToken);
-//			StaticCredentialsProvider credentialsProvider = StaticCredentialsProvider.create(sessionCredentials);
-//
-//			this.bedrockClient = BedrockRuntimeClient.builder().region(Region.of("us-west-2"))
-//					.credentialsProvider(credentialsProvider).build();
-//	    }
 	
 		@GetMapping("/api/{user}/inquire")
 		String inquire(@PathVariable("user") String user, @RequestParam String question) {
