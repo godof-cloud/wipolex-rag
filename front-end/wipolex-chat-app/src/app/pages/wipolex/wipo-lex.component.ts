@@ -8,6 +8,8 @@ import { UploadService } from 'src/app/_services/upload.service';
 })
 export class WipoLexComponent {
 
+  
+
   constructor(private uploadService: UploadService) { }
 
   question: string = '';
@@ -31,7 +33,7 @@ export class WipoLexComponent {
             console.log('API call successful!', response);
             if(response.type === 4 ) {
             // console.log("response---",response)
-            const jsonResponse = JSON.parse(response?.body);
+            const jsonResponse = JSON.parse(this.cleanStringValue(response?.body));
             // console.log('jsonResponse ---',jsonResponse)
             this.displayResult = true;
             this.conversation.push({user: 'AI Assistant', text: jsonResponse.answer});
@@ -63,5 +65,23 @@ export class WipoLexComponent {
 
   get hasConversation() {
     return this.conversation.length > 0;
+  }
+
+   cleanStringValue(text: string): string {
+    // Define regex patterns outside the function for efficiency
+// Matches common Unicode bullets, asterisks, and hyphens (as list markers)
+const bulletRegex = /[*•‣⁃●▶►▪-]/g; // hyphen needs to be at end or escaped in character class
+// Matches one or more whitespace characters (including newlines, tabs, spaces)
+const multipleSpacesRegex = /\s\s+/g;
+    // 1. Remove bullet characters
+    let cleanedText = text.replace(bulletRegex, '');
+  
+    // 2. Replace multiple spaces (including newlines, tabs) with a single space
+    cleanedText = cleanedText.replace(multipleSpacesRegex, ' ');
+  
+    // 3. Trim leading/trailing whitespace
+    cleanedText = cleanedText.trim();
+  
+    return cleanedText;
   }
 }
