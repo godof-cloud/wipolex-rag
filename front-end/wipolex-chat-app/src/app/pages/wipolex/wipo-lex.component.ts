@@ -44,7 +44,10 @@ export class WipoLexComponent {
             }
           } catch (jsonParseError) {
             this.blocked = false;
-            this.ErrorDisplay = true;
+            setTimeout(() => {
+              this.ErrorDisplay = false;
+             }, 1500);
+             this.ErrorDisplay = true;
           }
        
         },
