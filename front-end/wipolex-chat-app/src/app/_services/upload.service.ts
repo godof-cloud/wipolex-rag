@@ -10,10 +10,10 @@ export class UploadService {
   constructor(private http: HttpClient) { }
 
 
-  submitQuestion(question): Observable<HttpEvent<{}>> {
+  submitQuestion(question,user): Observable<any> {
     let myFormData = new FormData();
     myFormData.append('question', question);
-    const req = new HttpRequest('POST', environment.apiUrl + 'searchingAnswer', myFormData, {
+    const req = new HttpRequest('GET', environment.apiUrl + user +'/inquire?question='+question,  {
       reportProgress: true,
       responseType: 'text'
     });

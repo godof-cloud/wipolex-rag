@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   contextIsRoot: false,
   webComponentsPath: '',
-  apiUrl: 'https://',
+  apiUrl: 'http://dos8bi9jrhxbm.cloudfront.net/',
   cookieDomain: 'localhost',
   languageQueryParamName: 'lang',
   siteUrl: '',

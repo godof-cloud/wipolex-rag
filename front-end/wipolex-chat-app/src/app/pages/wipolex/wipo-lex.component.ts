@@ -21,16 +21,20 @@ export class WipoLexComponent {
     this.displayResult = false;
     this.answer = '';
     this.blocked = true;
-    setTimeout(() => {
-      // this.uploadService.submitQuestion(this.question).subscribe(
-      //   response => {
+    console.log('call submitQuestion')
+      this.uploadService.submitQuestion(this.question,'User').subscribe(
+        response => {
+          console.log('API call successful!', response.type,response);
+          if(response.type === 3 ) {
           this.displayResult = true;
-          this.answer = 'test test';
-          this.conversation.push({user: 'AI Assistant', text: this.answer});
+          this.conversation.push({user: 'AI Assistant', text: response.partialText});
           this.blocked = false;
           this.question = '';
-        // });
-    }, 500);
+          }
+        },
+        error => {
+          console.error('API call failed!', error);
+        });
   }
 
   enterQuestion() {
