@@ -92,11 +92,22 @@ public class AiAssistantController {
 	    try {
 	        // Create the messages format payload for Claude 3
 	        Map<String, Object> requestPayload = new HashMap<>();
-
-	        Map<String, Object> systemMessage = new HashMap<>();
+	        String systemPrompt = "You are an AI assistant that processes knowledge context and responds to queries. " +
+	                "EXTREMELY IMPORTANT: Your response MUST ALWAYS be formatted as a valid JSON object with EXACTLY two fields:\n" +
+	                "1. 'answer': A thorough answer to the user's query based ONLY on the provided knowledge context\n" +
+	                "2. 'references': An array of source identifiers (e.g. 'Source 1', 'Source 2') that you referenced in your answer\n\n" +
+	                "Example of the ONLY valid response format:\n" +
+	                "{\n" +
+	                "  \"answer\": \"Your detailed answer goes here...\",\n" +
+	                "  \"references\": [\"Source 1\", \"Source 2\"]\n" +
+	                "}\n\n" +
+	                "DO NOT include any other fields in your JSON. DO NOT structure your answer as JSON within JSON. " +
+	                "The entire response must be valid JSON that can be directly parsed.";
+	        requestPayload.put("system", systemPrompt);
+	      /*  Map<String, Object> systemMessage = new HashMap<>();
 	        systemMessage.put("role", "assistant");
-	        systemMessage.put("content", "Always respond with valid JSON containing 'answer' and 'references' keys.");
-	        
+	        systemMessage.put("content", "CRITICAL INSTRUCTION - HIGHEST PRIORITY:Always respond with valid JSON containing 'answer' and 'references' keys.");
+	        */
 	        // User message with knowledge context and query
 	        Map<String, Object> userMessage = new HashMap<>();
 	        userMessage.put("role", "user");
@@ -106,7 +117,7 @@ public class AiAssistantController {
 	        
 	        // Add messages to the request
 	        List<Map<String, Object>> messages = new ArrayList<>();
-	        messages.add(systemMessage);
+	       // messages.add(systemMessage);
 	        messages.add(userMessage);
 	        
 	        requestPayload.put("messages", messages);
