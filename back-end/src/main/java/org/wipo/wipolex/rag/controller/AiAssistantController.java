@@ -93,6 +93,10 @@ public class AiAssistantController {
 	    try {
 	        // Create the messages format payload for Claude 3
 	        Map<String, Object> requestPayload = new HashMap<>();
+
+	        Map<String, Object> systemMessage = new HashMap<>();
+	        systemMessage.put("role", "assistant");
+	        systemMessage.put("content", "Always respond with valid JSON containing 'answer' and 'references' keys.");
 	        
 	        // User message with knowledge context and query
 	        Map<String, Object> userMessage = new HashMap<>();
@@ -103,6 +107,7 @@ public class AiAssistantController {
 	        
 	        // Add messages to the request
 	        List<Map<String, Object>> messages = new ArrayList<>();
+	        messages.add(systemMessage);
 	        messages.add(userMessage);
 	        
 	        requestPayload.put("messages", messages);

@@ -30,6 +30,7 @@ import localeEs from '@angular/common/locales/es';
 import { WipoLexComponent } from './pages/wipolex/wipo-lex.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
+
 registerLocale(localeEs);
 
 

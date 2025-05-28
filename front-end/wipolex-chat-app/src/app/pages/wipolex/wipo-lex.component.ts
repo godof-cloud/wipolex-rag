@@ -15,22 +15,41 @@ export class WipoLexComponent {
   blocked = false;
   displayResult = false;
   conversation: any[] = [];
+  ErrorDisplay = false;
 
   submitQuestion() {
+    this.ErrorDisplay = false;
     this.conversation.push({user: 'User', text: this.question});
     this.displayResult = false;
     this.answer = '';
     this.blocked = true;
-    setTimeout(() => {
-      // this.uploadService.submitQuestion(this.question).subscribe(
-      //   response => {
-          this.displayResult = true;
-          this.answer = 'test test';
-          this.conversation.push({user: 'AI Assistant', text: this.answer});
-          this.blocked = false;
-          this.question = '';
-        // });
-    }, 500);
+    console.log('call submitQuestion')
+      this.uploadService.submitQuestion(this.question,'User').subscribe(
+        response => {
+          try {
+            // Attempt to parse as JSON
+            console.log('API call successful!', response);
+            if(response.type === 4 ) {
+            console.log("response---",response)
+            const jsonResponse = JSON.parse(response?.body);
+            console.log('jsonResponse ---',jsonResponse)
+            this.displayResult = true;
+            this.conversation.push({user: 'AI Assistant', text: jsonResponse.answer,references:jsonResponse.references});
+           setTimeout(() => {
+            this.blocked = false;
+            this.question = '';
+           }, 500);
+            
+            }
+          } catch (jsonParseError) {
+            this.blocked = false;
+            this.ErrorDisplay = true;
+          }
+       
+        },
+        error => {
+          console.error('API call failed!', error);
+        });
   }
 
   enterQuestion() {

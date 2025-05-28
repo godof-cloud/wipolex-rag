@@ -1,31 +1,59 @@
 <!-- <w-block-ui [blocked]="blocked" [title]="'processing'" [text]="'please wait'"></w-block-ui> -->
 <f-facet name="step-info">
-  <w-page-header [title]="'WIPO Lex'" [disableUppercase]="true" [showPortfolio]="false">
+  <w-page-header [title]="'WIPO AI Assistant'" [disableUppercase]="true" [showPortfolio]="false">
   </w-page-header>
 </f-facet>
 
-<w-step>
+<!-- <w-step>
   <p facet-step-info>How to assist you ...</p>
-</w-step>
+</w-step> -->
 
 <w-edit-panel>
-  <w-section *ngIf="blocked">
+  <!-- <w-section *ngIf="blocked">
     <w-slot style="padding: 10px;">
       <f-facet name="actions">  Loading...   </f-facet>
     </w-slot>
-  </w-section>
+   </w-section> -->
   <w-section *ngIf="hasConversation">
     <w-slot  style="padding: 10px;">
       <f-facet *ngFor="let item of conversation;" name="actions">
-      &nbsp;<b>{{item.user}}</b>
-      <br>&nbsp;{{item.text}}
+        <div *ngIf="item.user === 'User'" class="textAlignright">
+          <b>{{item.user}}</b>    <button w-button buttonType="arrow_forward" size="small"> </button>
+          <br>{{item.text}} 
+        </div>
+        <div>&nbsp;</div>
+        <div *ngIf="item.user === 'AI Assistant'" class="textAlignleft">
+          <b>{{item.user}}</b> 
+          <br>{{item.text}} 
+          <br><br><b>References</b> : 
+          <div  *ngFor="let ref of item.references;">
+            {{ref}}
+          </div>
+        </div>
+        <!-- <f-facet *ngFor="let ref of references;" name="actions">
+          <b>{{ref}}</b>
+        </f-facet> -->
     </f-facet>
     </w-slot>
   </w-section>
 
+  <w-section *ngIf="blocked">
+  <w-slot style="padding: 10px;">
+    <f-facet name="actions">  Thinking...   </f-facet>
+  </w-slot>
+ </w-section>
+
+ <w-section *ngIf="ErrorDisplay">
+  <w-slot style="padding: 10px;color: red;">
+    <f-facet name="actions">  Please try again...   </f-facet>
+  </w-slot>
+ </w-section>
+
+ 
+
   <w-section>
     <w-slot>
-      <w-input-textarea  [(ngModel)]="question"  [label]="'Ask WIPO Lex'"  [labelOnTop]="true"></w-input-textarea>
+      <w-input-textarea  [(ngModel)]="question"  [label]="'Ask AI Assistant'"  [labelOnTop]="true"></w-input-textarea>
     </w-slot>
   </w-section>
 
