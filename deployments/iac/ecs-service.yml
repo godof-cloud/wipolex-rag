@@ -118,7 +118,7 @@ Resources:
     Properties:
       TargetType: 'ip'
       HealthCheckIntervalSeconds: 10
-      HealthCheckPath: !Sub '/health'
+      HealthCheckPath: !Sub '/api/health'
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
