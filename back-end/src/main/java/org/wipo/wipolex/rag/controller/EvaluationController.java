@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.wipo.wipolex.rag.services.KnowledgeBaseService;
@@ -46,7 +46,7 @@ private static final Logger log = LoggerFactory.getLogger(AiAssistantController.
 	        this.bedrockClient = bedrockClient;
 	    }
 	
-		@GetMapping("/api/evaluation")
+		@PostMapping("/api/evaluation")
 		ResponseEntity<String> inquire(@RequestBody List<String> questions) {
 			String evaluationJson = evaluationService.generateEvaluationFile(questions);
 	        
