@@ -19,14 +19,21 @@
       <f-facet *ngFor="let item of conversation;" name="actions">
         <!-- <div *ngIf="blocked">Just a second... </div> -->
         <div *ngIf="item.user === 'User'" class="textAlignright">
-          <b>{{item.user}}</b>    
+          <b>{{item.user}}</b>    <button w-button buttonType="arrow_forward" size="small"> </button>
           <br>{{item.text}} 
         </div>
         <div>&nbsp;</div>
         <div *ngIf="item.user === 'AI Assistant'" class="textAlignleft">
-          <b>{{item.user}}</b>
+          <b>{{item.user}}</b> 
           <br>{{item.text}} 
+          <br><br><b>References</b> :  {{item.references}}
+          <div  *ngFor="let ref of item.references;">
+            {{ref}}
+          </div>
         </div>
+        <!-- <f-facet *ngFor="let ref of references;" name="actions">
+          <b>{{ref}}</b>
+        </f-facet> -->
     </f-facet>
     </w-slot>
   </w-section>
@@ -37,9 +44,17 @@
   </w-slot>
  </w-section>
 
+ <w-section *ngIf="ErrorDisplay">
+  <w-slot style="padding: 10px;">
+    <f-facet name="actions">  Please try again...   </f-facet>
+  </w-slot>
+ </w-section>
+
+ 
+
   <w-section>
     <w-slot>
-      <w-input-textarea  [(ngModel)]="question"  [label]="'Ask WIPO AI Assistant'"  [labelOnTop]="true"></w-input-textarea>
+      <w-input-textarea  [(ngModel)]="question"  [label]="'Ask AI Assistant'"  [labelOnTop]="true"></w-input-textarea>
     </w-slot>
   </w-section>
 
