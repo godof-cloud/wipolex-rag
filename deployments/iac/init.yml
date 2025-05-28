@@ -72,8 +72,8 @@ Resources:
         #   SourceSecurityGroupId: !Ref WipoPrefixListSecurityGroupHttps
         - Description: Allow HTTPS access from Cloudfront IPs
           IpProtocol: tcp
-          FromPort: '443'
-          ToPort: '443'
+          FromPort: '80'
+          ToPort: '80'
           SourcePrefixListId: pl-82a045eb #AWS-managed com.amazonaws.global.cloudfront.origin-facing prefix list
      
   ECSSecurityGroup:
@@ -100,31 +100,12 @@ Resources:
           ToPort: '443'
           CidrIp: '0.0.0.0/0'
        
-  # WipoPrefixListSecurityGroupHttp:
-  #   Type: AWS::EC2::SecurityGroup
-  #   Properties:
-  #     GroupName: !Join ['-', [!Ref NamePrefix, 'wipo-prefix-http']]
-  #     GroupDescription: WIPO prefix list for http
-  #     VpcId: !Ref VpcId
-  #     SecurityGroupIngress:
-  #       - Description: Allow HTTP access from WIPO IPs
-  #         IpProtocol: tcp
-  #         FromPort: '80'
-  #         ToPort: '80'
-  #         SourcePrefixListId: pl-077825f18b5d86e6d
-
-  # WipoPrefixListSecurityGroupHttps:
-  #   Type: AWS::EC2::SecurityGroup
-  #   Properties:
-  #     GroupName: !Join ['-', [!Ref NamePrefix, 'wipo-prefix-https']]
-  #     GroupDescription: WIPO prefix list for https
-  #     VpcId: !Ref VpcId
-  #     SecurityGroupIngress:
-  #       - Description: Allow HTTP access from WIPO IPs
-  #         IpProtocol: tcp
-  #         FromPort: '443'
-  #         ToPort: '443'
-  #         SourcePrefixListId: pl-077825f18b5d86e6d
+  AWSSecrets:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: AWS Credentials
+      Name: !Sub /${NamePrefix}/aws/settings
+      SecretString: !Sub '{"accessKey":"TBD","secretKey":"TBD","sessionToken":"TBD"}'
 
 Outputs:
   # RepositoryName:

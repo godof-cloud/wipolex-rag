@@ -1,10 +1,13 @@
-FROM registry.wipo.int/docker.io/library/amazoncorretto:17-alpine-jdk
+FROM amazoncorretto:17-alpine-jdk
 
-# Install artifact
-VOLUME /app
+# Create directory for application
+WORKDIR /app
+
+# Copy jar file into container
 COPY target/wipolex-rag.jar /app/wipolex-rag.jar
-
+RUN chmod +x /app/wipolex-rag.jar
+# Expose application port
 EXPOSE 8080
 
-WORKDIR /app
-ENTRYPOINT ["java","-jar", "wipolex-rag.jar"]
+# Run application
+ENTRYPOINT ["java", "-jar", "/app/wipolex-rag.jar"]

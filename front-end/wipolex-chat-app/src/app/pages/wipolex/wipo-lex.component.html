@@ -14,18 +14,18 @@
       <f-facet name="actions">  Loading...   </f-facet>
     </w-slot>
   </w-section>
-  <w-section *ngIf="displayResult">
+  <w-section *ngIf="hasConversation">
     <w-slot  style="padding: 10px;">
-      <f-facet name="actions">
-      &nbsp;Question: {{question}}
-      <br>&nbsp;Answer: {{answer}}
+      <f-facet *ngFor="let item of conversation;" name="actions">
+      &nbsp;<b>{{item.user}}</b>
+      <br>&nbsp;{{item.text}}
     </f-facet>
     </w-slot>
   </w-section>
 
   <w-section>
     <w-slot>
-      <w-input-textarea  (click)="enterQuestion()" [(ngModel)]="question"  [label]="'Ask WIPO Lex'"  [labelOnTop]="true"></w-input-textarea>
+      <w-input-textarea  [(ngModel)]="question"  [label]="'Ask WIPO Lex'"  [labelOnTop]="true"></w-input-textarea>
     </w-slot>
   </w-section>
 

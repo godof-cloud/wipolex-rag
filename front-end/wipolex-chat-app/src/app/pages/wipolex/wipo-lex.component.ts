@@ -9,12 +9,15 @@ import { UploadService } from 'src/app/_services/upload.service';
 export class WipoLexComponent {
 
   constructor(private uploadService: UploadService) { }
+
   question: string = '';
   answer: string = '';
   blocked = false;
   displayResult = false;
+  conversation: any[] = [];
 
   submitQuestion() {
+    this.conversation.push({user: 'User', text: this.question});
     this.displayResult = false;
     this.answer = '';
     this.blocked = true;
@@ -22,16 +25,20 @@ export class WipoLexComponent {
       // this.uploadService.submitQuestion(this.question).subscribe(
       //   response => {
           this.displayResult = true;
-          this.question;
           this.answer = 'test test';
+          this.conversation.push({user: 'AI Assistant', text: this.answer});
           this.blocked = false;
+          this.question = '';
         // });
     }, 500);
-
   }
 
   enterQuestion() {
     this.blocked = true;
     this.displayResult = false;
+  }
+
+  get hasConversation() {
+    return this.conversation.length > 0;
   }
 }
