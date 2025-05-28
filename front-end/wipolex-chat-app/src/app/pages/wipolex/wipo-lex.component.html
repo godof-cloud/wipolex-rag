@@ -40,12 +40,12 @@
 
   <w-section *ngIf="blocked">
   <w-slot style="padding: 10px;">
-    <f-facet name="actions">  Searching...   </f-facet>
+    <f-facet name="actions">  Thinking...   </f-facet>
   </w-slot>
  </w-section>
 
  <w-section *ngIf="ErrorDisplay">
-  <w-slot style="padding: 10px;">
+  <w-slot style="padding: 10px;color: red;">
     <f-facet name="actions">  Please try again...   </f-facet>
   </w-slot>
  </w-section>

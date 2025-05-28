@@ -18,6 +18,7 @@ export class WipoLexComponent {
   ErrorDisplay = false;
 
   submitQuestion() {
+    this.ErrorDisplay = false;
     this.conversation.push({user: 'User', text: this.question});
     this.displayResult = false;
     this.answer = '';
@@ -25,7 +26,6 @@ export class WipoLexComponent {
     console.log('call submitQuestion')
       this.uploadService.submitQuestion(this.question,'User').subscribe(
         response => {
-
           try {
             // Attempt to parse as JSON
             console.log('API call successful!', response);
@@ -35,8 +35,11 @@ export class WipoLexComponent {
             console.log('jsonResponse ---',jsonResponse)
             this.displayResult = true;
             this.conversation.push({user: 'AI Assistant', text: jsonResponse.answer,references:jsonResponse.references});
+           setTimeout(() => {
             this.blocked = false;
             this.question = '';
+           }, 500);
+            
             }
           } catch (jsonParseError) {
             this.blocked = false;
