@@ -24,7 +24,7 @@ public class AWSConfig {
     private String sessionToken;
     
 	@Bean
-	public BedrockRuntimeClient bedrockClient(BedrockRuntimeClient bedrockClient) {
+	public BedrockRuntimeClient bedrockClient() {
 		 AwsSessionCredentials sessionCredentials = AwsSessionCredentials.create(accessKeyId, secretKey, sessionToken);
 			StaticCredentialsProvider credentialsProvider = StaticCredentialsProvider.create(sessionCredentials);
 

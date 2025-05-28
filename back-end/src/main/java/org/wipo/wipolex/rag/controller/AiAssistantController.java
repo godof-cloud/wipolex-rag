@@ -18,10 +18,7 @@ import org.wipo.wipolex.rag.services.KnowledgeBaseService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.SdkBytes;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.bedrockagentruntime.model.KnowledgeBaseRetrievalResult;
 import software.amazon.awssdk.services.bedrockagentruntime.model.RetrieveResponse;
 import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient;
@@ -44,12 +41,12 @@ public class AiAssistantController {
     
 	private final KnowledgeBaseService knowledgeBaseService; // Required
 
-	@Autowired
 	private BedrockRuntimeClient bedrockClient;
 	  
 	 @Autowired
-	    public AiAssistantController(KnowledgeBaseService knowledgeBaseService) {
+	    public AiAssistantController(KnowledgeBaseService knowledgeBaseService, BedrockRuntimeClient bedrockClient) {
 	        this.knowledgeBaseService = knowledgeBaseService;
+	        this.bedrockClient = bedrockClient;
 	    }
 //	 @Autowired(required = false)
 //	    public void setBedrockClient(BedrockRuntimeClient bedrockClient) {
