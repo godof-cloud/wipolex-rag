@@ -1,4 +1,4 @@
-package org.wipo.wipolex.rag.controller;
+package org.wipo.wipolex.rag.services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,69 +8,38 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.wipo.wipolex.rag.services.KnowledgeBaseService;
+import org.wipo.wipolex.rag.controller.AiAssistantController;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.SdkBytes;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.bedrockagentruntime.model.KnowledgeBaseRetrievalResult;
 import software.amazon.awssdk.services.bedrockagentruntime.model.RetrieveResponse;
 import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient;
 import software.amazon.awssdk.services.bedrockruntime.model.InvokeModelRequest;
 import software.amazon.awssdk.services.bedrockruntime.model.InvokeModelResponse;
-@RestController
-public class AiAssistantController {
-	private static final Logger log = LoggerFactory.getLogger(AiAssistantController.class);
+
+public class AiModelServiceImpl implements AiModelService {
 	
-	// Change property name to match your configuration file
-    @Value("${aws.accessKeyId}")  // This should match exactly with your properties file
-    private String accessKeyId;
-    
-    // Change property name to match your configuration file
-    @Value("${aws.secretKey}")    // This should match exactly with your properties file
-    private String secretKey;
-    
-    @Value("${aws.session-token}")   
-    private String sessionToken;
-    
-	private final KnowledgeBaseService knowledgeBaseService; // Required
+	private static final Logger log = LoggerFactory.getLogger(AiModelServiceImpl.class);
 
 	@Autowired
-	private BedrockRuntimeClient bedrockClient;
-	  
-	 @Autowired
-	    public AiAssistantController(KnowledgeBaseService knowledgeBaseService) {
-	        this.knowledgeBaseService = knowledgeBaseService;
-	    }
-//	 @Autowired(required = false)
-//	    public void setBedrockClient(BedrockRuntimeClient bedrockClient) {
-//		 AwsSessionCredentials sessionCredentials = AwsSessionCredentials.create(accessKeyId, secretKey, sessionToken);
-//			StaticCredentialsProvider credentialsProvider = StaticCredentialsProvider.create(sessionCredentials);
-//
-//			this.bedrockClient = BedrockRuntimeClient.builder().region(Region.of("us-west-2"))
-//					.credentialsProvider(credentialsProvider).build();
-//	    }
+	private KnowledgeBaseService knowledgeBaseService;
 	
-		@GetMapping("/api/{user}/inquire")
-		String inquire(@PathVariable("user") String user, @RequestParam String question) {
-			log.info("inside inquire**");
-			// Retrieve information from knowledge base
-			RetrieveResponse retrieveResponse = knowledgeBaseService.retrieveFromKnowledgeBase(question);
-			log.info("retrieveResponse" + retrieveResponse);
-			// Format the retrieved information as context
-			String knowledgeContext = formatRetrievedInformation(retrieveResponse);
-			// Send the query along with the knowledge context to the agent
-			return invokeAgentWithContext(question, knowledgeContext);
-		}
+	@Autowired
+	private BedrockRuntimeClient bedrockClient;
+	
+	@Override
+	public String queryLLMwithKnowledgeBase(String question) {
+		RetrieveResponse retrieveResponse = knowledgeBaseService.retrieveFromKnowledgeBase(question);
+		log.info("retrieveResponse" + retrieveResponse);
+		// Format the retrieved information as context
+		String knowledgeContext = formatRetrievedInformation(retrieveResponse);
+		// Send the query along with the knowledge context to the agent
+		return invokeAgentWithContext(question, knowledgeContext);
+	}
+	
 	private String formatRetrievedInformation(RetrieveResponse retrieveResponse) {
         StringBuilder contextBuilder = new StringBuilder();
         contextBuilder.append("Here is relevant information from the knowledge base:\n\n");
@@ -157,39 +126,5 @@ public class AiAssistantController {
 	        return "I encountered an error while retrieving information. " + e.getMessage();
 	    }
 	}
-	 private String createModelPrompt(String prompt) {
-	        // For Claude/Anthropic models
-	        return "{\n" +
-	               "  \"prompt\": \"" + escapeJsonString(prompt) + "\",\n" +
-	               "  \"max_tokens_to_sample\": 2000,\n" +
-	               "  \"temperature\": 0.7,\n" +
-	               "  \"top_p\": 0.9\n" +
-	               "}";
-	    }
-	 // Helper method to properly escape JSON strings
-	    private String escapeJsonString(String input) {
-	        return input.replace("\\", "\\\\")
-	                    .replace("\"", "\\\"")
-	                    .replace("\n", "\\n")
-	                    .replace("\r", "\\r")
-	                    .replace("\t", "\\t");
-	    }
-	    private String parseModelResponse(String responseJson) {
-	        try {
-	            // Parse using your preferred JSON library
-	            // This is a simplified example using basic string extraction
-	            // You should use proper JSON parsing in production
-	            int startIndex = responseJson.indexOf("\"completion\":") + 14;
-	            int endIndex = responseJson.indexOf("\"", startIndex);
-	            
-	            if (startIndex >= 14 && endIndex > startIndex) {
-	                return responseJson.substring(startIndex, endIndex);
-	            } else {
-	                return "Error parsing model response";
-	            }
-	        } catch (Exception e) {
-	           // log.error("Error parsing model response: ", e);
-	            return "Error parsing model response: " + e.getMessage();
-	        }
-	    }
+
 }

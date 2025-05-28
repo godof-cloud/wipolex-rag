@@ -27,9 +27,11 @@ import software.amazon.awssdk.services.bedrockagentruntime.model.RetrieveRespons
 import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient;
 import software.amazon.awssdk.services.bedrockruntime.model.InvokeModelRequest;
 import software.amazon.awssdk.services.bedrockruntime.model.InvokeModelResponse;
+
 @RestController
-public class AiAssistantController {
-	private static final Logger log = LoggerFactory.getLogger(AiAssistantController.class);
+public class EvaluationController {
+
+private static final Logger log = LoggerFactory.getLogger(AiAssistantController.class);
 	
 	// Change property name to match your configuration file
     @Value("${aws.accessKeyId}")  // This should match exactly with your properties file
@@ -44,21 +46,20 @@ public class AiAssistantController {
     
 	private final KnowledgeBaseService knowledgeBaseService; // Required
 
-	@Autowired
 	private BedrockRuntimeClient bedrockClient;
 	  
 	 @Autowired
-	    public AiAssistantController(KnowledgeBaseService knowledgeBaseService) {
+	    public EvaluationController(KnowledgeBaseService knowledgeBaseService) {
 	        this.knowledgeBaseService = knowledgeBaseService;
 	    }
-//	 @Autowired(required = false)
-//	    public void setBedrockClient(BedrockRuntimeClient bedrockClient) {
-//		 AwsSessionCredentials sessionCredentials = AwsSessionCredentials.create(accessKeyId, secretKey, sessionToken);
-//			StaticCredentialsProvider credentialsProvider = StaticCredentialsProvider.create(sessionCredentials);
-//
-//			this.bedrockClient = BedrockRuntimeClient.builder().region(Region.of("us-west-2"))
-//					.credentialsProvider(credentialsProvider).build();
-//	    }
+	 @Autowired(required = false)
+	    public void setBedrockClient(BedrockRuntimeClient bedrockClient) {
+		 AwsSessionCredentials sessionCredentials = AwsSessionCredentials.create(accessKeyId, secretKey, sessionToken);
+			StaticCredentialsProvider credentialsProvider = StaticCredentialsProvider.create(sessionCredentials);
+
+			this.bedrockClient = BedrockRuntimeClient.builder().region(Region.of("us-west-2"))
+					.credentialsProvider(credentialsProvider).build();
+	    }
 	
 		@GetMapping("/api/{user}/inquire")
 		String inquire(@PathVariable("user") String user, @RequestParam String question) {
