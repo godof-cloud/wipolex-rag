@@ -30,11 +30,12 @@ export class WipoLexComponent {
             // Attempt to parse as JSON
             console.log('API call successful!', response);
             if(response.type === 4 ) {
-            console.log("response---",response)
+            // console.log("response---",response)
             const jsonResponse = JSON.parse(response?.body);
-            console.log('jsonResponse ---',jsonResponse)
+            // console.log('jsonResponse ---',jsonResponse)
             this.displayResult = true;
-            this.conversation.push({user: 'AI Assistant', text: jsonResponse.answer,references:jsonResponse.references});
+            this.conversation.push({user: 'AI Assistant', text: jsonResponse.answer});
+            if(jsonResponse.references.length > 0) {  this.conversation.push({references:jsonResponse.references}); }
            setTimeout(() => {
             this.blocked = false;
             this.question = '';

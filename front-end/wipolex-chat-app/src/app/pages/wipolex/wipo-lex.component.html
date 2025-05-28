@@ -16,19 +16,21 @@
    </w-section> -->
   <w-section *ngIf="hasConversation">
     <w-slot  style="padding: 10px;">
-      <f-facet *ngFor="let item of conversation;" name="actions">
-        <div *ngIf="item.user === 'User'" class="textAlignright">
+      <f-facet *ngFor="let item of conversation;" name="actions" >
+        <div *ngIf="item.user === 'User'" class="textAlignright" style="padding: 10px; background-color:#DFDFDF;">
           <b>{{item.user}}</b>    <button w-button buttonType="arrow_forward" size="small"> </button>
           <br>{{item.text}} 
         </div>
         <div>&nbsp;</div>
         <div *ngIf="item.user === 'AI Assistant'" class="textAlignleft">
           <b>{{item.user}}</b> 
-          <br>{{item.text}} 
-          <br><br><b>References</b> : 
-          <div  *ngFor="let ref of item.references;">
-            {{ref}}
-          </div>
+          <br>{{item.text}}
+        </div>
+        <div *ngIf="item.references">
+        <b>References</b> : 
+          <span *ngFor="let ref of item.references;">
+            <br>{{ ref }}
+          </span>
         </div>
         <!-- <f-facet *ngFor="let ref of references;" name="actions">
           <b>{{ref}}</b>
