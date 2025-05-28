@@ -1,6 +1,6 @@
 <!-- <w-block-ui [blocked]="blocked" [title]="'processing'" [text]="'please wait'"></w-block-ui> -->
 <f-facet name="step-info">
-  <w-page-header [title]="'WIPO AI Assistant'" [disableUppercase]="true" [showPortfolio]="false">
+  <w-page-header [title]="'WIPO Lex AI Assistant'" [disableUppercase]="true" [showPortfolio]="false">
   </w-page-header>
 </f-facet>
 
@@ -29,7 +29,7 @@
         <div *ngIf="item.references">
         <b>References</b> : 
           <span *ngFor="let ref of item.references;">
-            <br>{{ ref }}
+            <br>{{ ref.title }} <b>[{{ref.refNum}}]</b>
           </span>
         </div>
         <!-- <f-facet *ngFor="let ref of references;" name="actions">
